@@ -1,38 +1,21 @@
-# create-svelte
+# BiddyGo
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+BiddyGo is an auction platform that provides a seamless and enjoyable experience for both buyers and sellers. With BiddyGo, you can discover a wide range of unique items, participate in auctions, and connect with a vibrant community of auction enthusiasts.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Explore diverse auctions for collectibles, comics, art, fashion, and more.
+- Effortlessly place bids and track your favorite auctions in real-time.
+- User-friendly interface for easy navigation.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Technologies Used
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+- C#
+- Docker
+- HTML, CSS, JS, TS
+- Svelte
+- Vite
 
-## Developing
+**Access the Application**: 
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+You can try out the live demo of BiddyGo at [https://www.placeholder.com](https://www.placeholder.com) without the need to download or set up anything.
