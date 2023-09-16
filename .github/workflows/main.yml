@@ -52,18 +52,3 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-
-  update_container:
-    needs: publish
-    name: Update Docker container
-    runs-on: ubuntu-latest
-    steps:
-    - name: Stop existing container
-      run: |
-        docker stop biddygo-container || true
-        docker rm biddygo-container || true
-    - name: Pull latest image
-      run: docker pull 1stzorua/biddygo
-    - name: Run updated container
-      run: docker run -d -p 3000:3000 --name biddygo-container 1stzorua/biddygo
-  
