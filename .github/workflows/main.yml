@@ -63,7 +63,7 @@ jobs:
         docker stop biddygo-container || true
         docker rm biddygo-container || true
     - name: Pull latest image
-      run: docker pull 1stzorua/biddygo:latest
+      run: docker pull 1stzorua/biddygo:main
     - name: Run updated container
-      run: docker run -d -p 3000:3000 --name biddygo-container 1stzorua/biddygo:latest
+      run: docker run -d -p 3000:3000 --name biddygo-container 1stzorua/biddygo:main
   
