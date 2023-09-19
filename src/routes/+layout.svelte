@@ -1,6 +1,6 @@
 <script>
-    import Header from '../components/Header.svelte';
-    import Wrapper from '../components/Wrapper.svelte';
+    import Header from '../components/Layout/Header.svelte';
+    import Wrapper from '../components/Layout/Wrapper.svelte';
 </script>
 
 <Wrapper>
