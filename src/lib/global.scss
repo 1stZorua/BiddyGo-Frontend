@@ -13,6 +13,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    overflow-x: hidden;
+    line-height: 1.5;
     font-family: $font-family-primary;
     font-size: $font-size-base;
     background: $background-color;
