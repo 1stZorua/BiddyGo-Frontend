@@ -17,10 +17,10 @@ $font-weight-extraBold: 800;
 $font-weight-black: 900;
 
 // Font Sizes 
-$font-size-base: 1.25rem; /* 20px (1.25 * 16px) */
-$font-size-medium: 2rem; /* 32px (2 * 16px) */
-$font-size-heading: 2.5rem; /* 40px (2.5 * 16px) */
-$font-size-hero: 4rem; /* 64px (4 * 16px) */
+$font-size-base: #{"min(max(12px, 3.5vw), 20px)"}; /* 20px (1.25 * 16px) */
+$font-size-medium: #{"min(max(20px, 4vw), 32px)"}; /* 32px (2 * 16px) */
+$font-size-heading: #{"min(max(24px, 4vw), 40px)"}; /* 40px (2.5 * 16px) */
+$font-size-hero: #{"min(max(28px, 4vw), 64px)"}; /* 64px (4 * 16px) */
 
 // Text Colors
 $primary: black;
@@ -38,6 +38,9 @@ $logo-font-size: $font-size-heading;
 $logo-font-weight: $font-weight-semiBold;
 $logo-accent: $accent-secondary;
 
+// Search 
+$search-padding: 10px 20px;
+
 // Body
 $background-color: $secondary;
 
@@ -45,6 +48,16 @@ $background-color: $secondary;
 $section-light: rgb(87, 197, 182, 0.7);
 $section-regular: $accent-primary;
 $section-dark: $accent-quaternary;
+
+// Wrapper
+$wrapper-gap: 50px;
+$wrapper-margin-inline: 50px;
+$wrapper-margin-bottom: 30px;
+$wrapper-margin: $wrapper-margin-bottom $wrapper-margin-inline 0 $wrapper-margin-inline; 
+
+// Header 
+$header-height: 60px;
+$header-margin-bottom: 0px;
 
 // Footer
 $footer-background-color: $primary;
@@ -56,9 +69,13 @@ $btn-font-size: $font-size-base;
 $btn-primary: $primary;
 $btn-secondary: $secondary;
 $btn-tertiary: $accent-secondary;
-$btn-padding: 0.781rem 2.8125rem; /* 12.5px (0.781 * 16px), 45px (2.8125 * 16px) */
+$btn-quaternary: $accent-primary;
+$btn-gap: 20px;
+$btn-height: 60px;
+$btn-padding-inline: 45px; /* 12.5px (0.781 * 16px), 45px (2.8125 * 16px) */
 $btn-border-size: 0.140625rem; /* 2.25px (0.140625 * 16px) */
-$btn-border: $btn-border-size solid $primary; 
+$btn-primary-border: $btn-border-size solid $btn-primary; 
+$btn-secondary-border: $btn-border-size solid $btn-tertiary;
 $btn-border-radius-small: 0.625rem; /* 10px (0.625 * 16px) */
 $btn-border-radius-normal: 1.25rem; /* 20px (1.25 * 16px) */
 $btn-border-radius-medium: 1.875rem; /* 30px (1.875 * 16px) */
@@ -66,6 +83,11 @@ $btn-border-radius-large: 2.5rem; /* 40px (2.5 * 16px) */
 $btn-border-radius-rounded: 3.125rem; /* 50px (3.125 * 16px) */
 $btn-border-radius-full: 6.25rem; /* 100px (6.25 * 16px) */
 $btn-border-radius-custom: 2.5rem 0rem; /* 40px (2.5 * 16px), 0px (0 * 16px) */
+
+// Line 
+$line-width: 50px;
+$line-height: $btn-border-size;
+$line-gap: $btn-gap;
 
 // Input
 $input-font-size: 1rem; /* 16px (1 * 16px) */
@@ -75,14 +97,16 @@ $icon-primary: $primary;
 $icon-secondary: $secondary;
 $icon-accent: #128071;
 $icon-border-color: $primary;
-$icon-padding: 0.625rem 1.25rem; /* 10px (0.625 * 16px) 20px (1.25 * 16px) */
+$icon-size: $btn-height; /* 10px (0.625 * 16px) 20px (1.25 * 16px) */
 
 // Screen
+$screen-height: calc(100vmin - $header-height - $header-margin-bottom - $wrapper-margin-bottom);
 $screen-width: 100rem; /* 1600px (100 * 16px) */
 $screen-small: 576px;
 $screen-medium: 768px;
 $screen-large: 992px;
 $screen-extraLarge: 1200px;
+$screen-wide: 1440px;
 
 // Transitions
 $transition-ultraFast: 0.01s ease-in;
