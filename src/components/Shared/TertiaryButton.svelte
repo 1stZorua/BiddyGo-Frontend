@@ -1,5 +1,6 @@
 <button>
     <slot></slot>
+    <i class="fa-solid fa-arrow-right-long"></i>
 </button>
 
 <style lang=scss>
@@ -7,58 +8,45 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-right: $btn-padding-inline;
+        gap: $line-gap;
         position: relative;
         z-index: 0;
-        padding-right: $line-gap;
+        height: $btn-height;
+        white-space: nowrap;
         font-family: $font-family-secondary;
         color: $btn-primary;
-        background: $btn-secondary;
+        background: none;
         border: none;
         text-transform: uppercase;
-        font-weight: $font-weight-medium;
+        font-weight: $font-weight-medium;;
         transition: 
             color $transition-fast;
+
+        i {
+            color: $btn-primary;
+            font-size: $font-size-medium;
+            animation: 
+                arrow $transition-duration linear infinite paused;
+        }
         
-        &::before {
-            content: '';
-            position: absolute;
-            z-index: -1;
-            width: 100%;
-            right: -$btn-padding-inline;
-            height: $btn-height;
-            padding-inline: $btn-padding-inline;
-            background: $btn-secondary;
-            border-right: calc($btn-border-size * 1.25) solid $btn-secondary;
-            transition: 
-                background $transition-fast,
-                border-color $transition-fast;
-        }
-
-        &::after {
-            content: '';
-            position: absolute;
-            right: -$btn-padding-inline;
-            display: inline-block;
-            width: $line-width;
-            height: $line-height;
-            background: $btn-primary;
-            transition: 
-                width $transition-fast;
-        }
-
         &:hover {
             cursor: pointer;
-            color: $btn-secondary;
 
-            &::before {
-                border-color: $btn-primary;
-                background: $btn-quaternary;
+            i {
+                animation-play-state: running;
             }
+        }
+    }
 
-            &::after {
-                width: 0px;
-            }
+    @keyframes arrow {
+        0% {
+            translate: 0;
+        }
+        50% {
+            translate: 15px;
+        }
+        100% {
+            translate: 0;
         }
     }
 </style>
