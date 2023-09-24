@@ -1,5 +1,5 @@
 <script lang=ts>
-    export let text : string;
+    export let text : string = "";
 </script>
 
 <div>
@@ -8,11 +8,14 @@
             <slot></slot>
         </span>
     </button>
-    <span>{text}</span>
+    {#if text !== ""}
+        <span>{text}</span>
+    {/if}
 </div>
 
 <style lang=scss>
     div {
+        width: max-content;
         display: flex;
         align-items: center;
         gap: $btn-gap;
@@ -21,6 +24,8 @@
             cursor: pointer;
 
             button {
+                border-color: $btn-tertiary;
+
                 span {
                     color: $btn-secondary;
                 }
@@ -45,14 +50,18 @@
         overflow: hidden;
         position: relative;
         z-index: 0;
-        background: $btn-secondary;
-        border: $btn-secondary-border;
+        background: none;
+        border: $btn-border-size solid var(--border-color, $btn-tertiary);
         border-radius: $btn-border-radius-rounded;
         width: $icon-size;
         height: $icon-size;
+        transition:
+            border-color $transition-fast;
 
         span {
-            color: $btn-primary;
+            display: flex;
+            align-items: center;
+            color: var(--color, $btn-primary);
             transition: color $transition-fast;
         }       
 
