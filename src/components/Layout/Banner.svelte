@@ -3,14 +3,14 @@
     import SecondaryButton from "../Shared/SecondaryButton.svelte";
 	import Subtitle from "../Shared/Subtitle.svelte";
     import Square from "../Shared/Square.svelte";
-    import comic from '$lib/comic.png';
 	import SecondaryText from "../Shared/SecondaryText.svelte";
+    import comic from '$lib/comic.png';
 </script>
 
 <section class="banner">
     <div class="container">
         <div class="text">
-            <Subtitle --line-color="black">Auctioning quality items since 2023</Subtitle>
+            <Subtitle>Auctioning quality items since 2023</Subtitle>
             <h1>A world of auctions awaits,</h1>
             <p>Bid confidently on our platform where every auction holds hidden treasures waiting for you to discover.</p>
             <div class="cta">
@@ -53,6 +53,10 @@
 </section>
 
 <style lang=scss>
+    .banner {
+        color: $primary;
+    }
+
     .banner .container {
         display: flex;
         align-items: center;
@@ -61,7 +65,7 @@
     .text {
         display: flex;
         flex-direction: column;
-        gap: 30px;
+        gap: $section-text-gap;
         flex: 0.75;
         min-width: 50%;
 
@@ -131,13 +135,14 @@
             
             i {
                 position: absolute;
-                color: $icon-accent;
-                transition: $transition-fast;
+                color: $icon-accent-primary;
                 font-size: $font-size-heading;
+                transition: 
+                    color $transition-fast;
 
                 &:hover {
-                cursor: pointer;
-                color: $icon-secondary;
+                    cursor: pointer;
+                    color: $icon-secondary;
                 }
             }
         }
@@ -169,7 +174,7 @@
                 span {
                     font-size: $font-size-medium;
                     font-weight: $font-weight-bold;
-                    color: white;
+                    color: $secondary;
                 }
             }
         }
@@ -248,17 +253,6 @@
                 }
             }
         }
-    }
-
-    @media(max-width: $screen-small) {
-        .cta {
-            margin-top: $btn-gap;
-            flex-direction: column;
-        }
-
-        .slider-container {
-            height: 400px;
-        }
 
         .slider .item {
             background: none;
@@ -266,6 +260,17 @@
             img {
                 object-fit: cover;
             }
+        }
+    }
+
+    @media(max-width: $screen-small) {
+        .cta {
+            margin-top: $btn-gap;
+            flex-direction: column-reverse;
+        }
+
+        .slider-container {
+            height: 400px;
         }
 
         .square-container .element {
