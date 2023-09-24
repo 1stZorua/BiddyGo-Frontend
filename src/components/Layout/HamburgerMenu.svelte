@@ -15,6 +15,7 @@
 
         &::after {
             content: '';
+            display: none;
             position: absolute;
             width: 150px;
             height: 150px;
