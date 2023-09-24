@@ -5,7 +5,14 @@
         display: flex;
         flex-direction: column;
         gap: $wrapper-gap;
-        width: $screen-width;
-        margin: $wrapper-margin;
+        margin: $wrapper-margin-normal;
+        max-width: $screen-width;
+        height: max-content;
+    }
+
+    @media (max-width: $screen-medium) {
+        main {
+            margin: $wrapper-margin-small;
+        }
     }
 </style>
