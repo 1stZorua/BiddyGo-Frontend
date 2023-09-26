@@ -1,4 +1,4 @@
-import { formatCurrency } from '$lib/formatCurrency';
+import { formatCurrency } from '$lib/tests/formatCurrency';
 import { it, expect } from 'vitest';
 
 it('Adds the $ before the given number', () => {
