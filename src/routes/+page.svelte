@@ -1,9 +1,9 @@
 <script>
-    import Banner from "../components/Layout/Banner.svelte";
-	import Recommendations from "../components/Layout/Recommendations.svelte";
-    import Browse from "../components/Layout/Browse.svelte";
-    import Slogan from "../components/Layout/Slogan.svelte";
-    import MobileApp from "../components/Layout/MobileApp.svelte";
+    import Banner from "../components/Layout/Banner/Banner.svelte";
+	import Recommendations from "../components/Layout/Recommendations/Recommendations.svelte";
+    import Browse from "../components/Layout/Browse/Browse.svelte";
+    import Slogan from "../components/Layout/Slogan/Slogan.svelte";
+    import MobileApp from "../components/Layout/MobileApp/MobileApp.svelte";
 </script>
 
 <Banner></Banner>
