@@ -7,8 +7,8 @@ export default defineConfig({
 		preprocessorOptions: {
 			scss: {
 				additionalData: `
-					@import '$lib/variables'; 
-					@import '$lib/global';
+					@import '$lib/scss/variables'; 
+					@import '$lib/scss/global';
 				`
 			}
 		}
