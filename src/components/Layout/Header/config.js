@@ -4,15 +4,15 @@ export const headerLinks = [
 		href: '#'
 	},
 	{
-		name: 'About Us',
+		name: 'Categories',
+		href: '/#browse'
+	},
+	{
+		name: 'Sell',
 		href: '#'
 	},
 	{
-		name: 'Contact',
-		href: '#'
-	},
-	{
-		name: 'News',
+		name: 'Help',
 		href: '#'
 	}
 ];
