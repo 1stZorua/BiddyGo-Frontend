@@ -4,6 +4,6 @@
     span {
         color: var(--color);
         font-family: $font-family-secondary;
-        text-transform: uppercase;
+        text-transform: var(--text-transform, uppercase);
     }
 </style>
