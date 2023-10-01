@@ -2,7 +2,7 @@
     import Heading from "../../Shared/Text/Heading.svelte";
 </script>
 
-<section class="browse">
+<section id="browse" class="browse">
     <div class="text">
         <Heading>Browse By Categories</Heading>
         <p>Explore our diverse range of categories to find the perfect treasures that match your interests and preferences.</p>
