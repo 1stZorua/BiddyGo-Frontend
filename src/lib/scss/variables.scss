@@ -59,7 +59,7 @@ $section-margin-top-small: calc($section-margin-top-regular * 0.225);
 
 // Wrapper
 $wrapper-gap: 50px;
-$wrapper-margin-inline-small: 40px;
+$wrapper-margin-inline-small: 30px;
 $wrapper-margin-inline-normal: 50px;
 $wrapper-margin-bottom: 30px;
 $wrapper-margin-normal: $wrapper-margin-bottom $wrapper-margin-inline-normal 0 $wrapper-margin-inline-normal; 
@@ -111,6 +111,9 @@ $icon-accent-secondary: #0059BD;
 $icon-border-color: $primary;
 $icon-size: $btn-height; /* 10px (0.625 * 16px) 20px (1.25 * 16px) */
 
+// Category
+$card-background-color: #1B607B;
+
 // Screen
 $screen-height: calc(100vmin - $header-height - $header-margin-bottom - $wrapper-margin-bottom);
 $screen-width: 100rem; /* 1600px (100 * 16px) */
@@ -121,6 +124,7 @@ $screen-extraLarge: 1200px;
 $screen-wide: 1440px;
 
 // Transitions
+$transition-scale: 1.25;
 $transition-duration: 1s;
 $transition-ultraFast: 0.01s ease-in;
 $transition-fast: 0.25s ease-in-out;
