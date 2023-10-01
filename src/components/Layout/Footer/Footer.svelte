@@ -39,11 +39,11 @@
             </div>
         </div>
         <div class="links">
-            <span>Terms of Service</span>
-            <span>Privacy Policy</span>
-            <span>Cookie Policy</span>
-            <span>Responsible Disclosure</span>
-            <span>&copy; Fontys 2023 - Milan de Haart</span>
+            <a href="/">Terms of Service</a>
+            <a href="/">Privacy Policy</a>
+            <a href="/">Cookie Policy</a>
+            <a href="/">Responsible Disclosure</a>
+            <a href="/">&copy; Fontys 2023 - Milan de Haart</a>
         </div>
     </div>
 </section>
@@ -54,7 +54,7 @@
         justify-content: center;
         width: 100%;
         background: $footer-background-color;
-        margin-top: -120px;
+        margin-top: 120px;
     }
 
     .container {
@@ -73,7 +73,7 @@
         color: white;
     }
 
-    span {
+    a {
         width: max-content;
         color: $gray-regular;
         transition: 
@@ -123,6 +123,7 @@
     }
 
     .cta .select-wrapper select {
+        outline: none;
         appearance: none;
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -138,6 +139,10 @@
         padding-right: calc($btn-gap * 3);
         transition:
             border-color $transition-fast;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     .socials-wrapper {
