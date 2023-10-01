@@ -7,6 +7,9 @@
 
 <style lang=scss>
     .logo {
+        background: var(--background);
+        position: relative;
+        z-index: 3;
         font-size: $logo-font-size;
         font-weight: $logo-font-weight;
 
