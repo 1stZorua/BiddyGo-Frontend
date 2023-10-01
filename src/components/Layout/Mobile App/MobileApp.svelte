@@ -35,6 +35,7 @@
         align-items: center;
         justify-content: space-between;
         height: $section-height-small * 2;
+        margin-bottom: -240px;
     }
 
     .text {
