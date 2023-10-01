@@ -19,7 +19,7 @@
 
         img:hover {
             cursor: pointer;
-            scale: 1.25;
+            scale: $transition-scale;
         }
     }
 
