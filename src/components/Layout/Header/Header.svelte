@@ -1,6 +1,6 @@
 <script lang=ts>
     import Logo from '../../Shared/Objects/Logo.svelte';
-	import HamburgerMenu from '../HamburgerMenu/HamburgerMenu.svelte';
+	import HamburgerMenu from './HamburgerMenu.svelte';
 	import PrimaryButton from '../../Shared/Buttons/Primary.svelte';
     import { headerLinks } from './config';
 
@@ -10,7 +10,7 @@
 
 <header>
     <nav>
-        <Logo></Logo>
+        <Logo --background="white"></Logo>
         <ul class="links">
             {#each headerLinks as link (link)}
                 <li><a href={link.href}>{link.name}</a></li>
@@ -39,7 +39,6 @@
     }
 
     nav {
-        position: relative;
         display: flex;
         justify-content: space-between;
         align-items: center;
