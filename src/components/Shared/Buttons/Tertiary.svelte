@@ -1,29 +1,31 @@
-<button>
+<script lang=ts>
+    export let href: string ="/";
+</script>
+
+<a href={href}>
     <slot></slot>
     <i class="fa-solid fa-arrow-right-long"></i>
-</button>
+</a>
 
 <style lang=scss>
-    button {
+    a {
         display: flex;
-        justify-content: center;
         align-items: center;
         gap: $line-gap;
         position: relative;
         z-index: 0;
         height: $btn-height;
+        width: max-content;
         white-space: nowrap;
         font-family: $font-family-secondary;
-        color: $btn-primary;
-        background: none;
-        border: none;
+        color: var(--color, $btn-primary);
         text-transform: uppercase;
         font-weight: $font-weight-medium;;
         transition: 
             color $transition-fast;
 
         i {
-            color: $btn-primary;
+            color: var(--color, $btn-primary);
             font-size: $font-size-medium;
             animation: 
                 arrow $transition-duration linear infinite paused;
