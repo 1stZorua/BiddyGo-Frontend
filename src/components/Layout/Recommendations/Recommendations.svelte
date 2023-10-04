@@ -2,7 +2,12 @@
     import Heading from "../../Shared/Text/Heading.svelte";
     import TertiaryButton from "../../Shared/Buttons/Tertiary.svelte";
     import Card from "./Card.svelte";
-    import comic from '$lib/img/comic.png';
+    import ring from '$lib/img/ring.png';
+    import bank from '$lib/img/bank.png';
+    import car from '$lib/img/car.png';
+    import coin from '$lib/img/coin.png';
+    import controller from '$lib/img/controller.png';
+    import pokemon from '$lib/img/pokemon.png';
 </script>
 
 <section class="recommendations">
@@ -14,12 +19,12 @@
         </div>
     </div>
     <div class="content">
-        <Card image={comic} --grid-area="a"></Card>
-        <Card image={comic} --grid-area="b"></Card>
-        <Card image={comic} --grid-area="c"></Card>
-        <Card image={comic} --grid-area="d"></Card>
-        <Card image={comic} --grid-area="e"></Card>
-        <Card image={comic} --grid-area="f"></Card>
+        <Card image={bank} --grid-area="a"></Card>
+        <Card image={car} --grid-area="b"></Card>
+        <Card image={pokemon} --grid-area="c"></Card>
+        <Card image={coin} --grid-area="d"></Card>
+        <Card image={controller} --grid-area="e"></Card>
+        <Card image={ring} --grid-area="f"></Card>
       </div>
 </section>
 
