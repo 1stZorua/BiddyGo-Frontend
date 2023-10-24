@@ -1,4 +1,8 @@
-<span>
+<script lang=ts>
+    export let active: boolean = true;
+</script>
+
+<span data-active={active}>
     <slot></slot>
 </span>
 
@@ -18,6 +22,17 @@
             background: var(--line-color, $btn-primary);
             height: $line-height;
             display: inline-block;
+        }
+    }
+
+    [data-active="false"] {
+        background: $skeleton-background-color;
+        background-size: 200% 100%; 
+        animation: $skeleton-animation;
+        color: transparent;
+
+        &::before {
+            display: none;
         }
     }
 </style>
