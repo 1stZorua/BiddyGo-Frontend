@@ -87,6 +87,7 @@ $btn-padding-inline: 45px; /* 12.5px (0.781 * 16px), 45px (2.8125 * 16px) */
 $btn-border-size: 0.140625rem; /* 2.25px (0.140625 * 16px) */
 $btn-primary-border: $btn-border-size solid $btn-primary; 
 $btn-secondary-border: $btn-border-size solid $btn-tertiary;
+$btn-option-border: $btn-border-size solid $gray-regular;
 $btn-border-radius-small: 0.625rem; /* 10px (0.625 * 16px) */
 $btn-border-radius-normal: 1.25rem; /* 20px (1.25 * 16px) */
 $btn-border-radius-medium: 1.875rem; /* 30px (1.875 * 16px) */
@@ -131,3 +132,7 @@ $transition-fast: 0.25s ease-in-out;
 $transition-normal: 0.5s ease-in-out;
 $transition-medium: 0.75s ease-in-out;
 $transition-slow: 1s ease-in-out;
+
+// Skeleton
+$skeleton-background-color: linear-gradient(90deg, #EEEEEE 25%, #DEDEDE 50%, #EEEEEE 75%);
+$skeleton-animation: loading 2s linear infinite;
