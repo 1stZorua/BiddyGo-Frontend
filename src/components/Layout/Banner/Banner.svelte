@@ -1,15 +1,13 @@
 <script>
-    import PrimaryButton from "../../Shared/Buttons/Primary.svelte";
-    import SecondaryButton from "../../Shared/Buttons/Secondary.svelte";
-	import Subtitle from "../../Shared/Text/Subtitle.svelte";
-    import Slider from "../../Layout/Banner/Slider.svelte";
+    import { PrimaryButton, SecondaryButton, Subtitle } from "../../index.ts"
+    import Slider from "./Slider.svelte";
 </script>
 
 <section class="banner">
     <div class="container">
         <div class="text">
             <Subtitle>Auctioning quality items since 2023</Subtitle>
-            <h1>A world of auctions awaits,</h1>
+            <h1>A world of auctions awaits, <b>Dive in!</b></h1>
             <p>Bid confidently on our platform where every auction holds hidden treasures waiting for you to discover.</p>
             <div class="cta">
                 <PrimaryButton --primary="white" --secondary="black">Start Bidding</PrimaryButton>
@@ -45,8 +43,7 @@
             line-height: 1.25;
             font-size: $font-size-hero;
 
-            &::after {
-                content: ' Dive in!';
+            b {
                 color: $accent-primary;
             }
         }
