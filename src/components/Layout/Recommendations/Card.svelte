@@ -1,14 +1,15 @@
 <script lang=ts>
+    import { FavoriteButton } from "../../index.ts";
+
     export let image : string;
-	import FavoriteButton from "../../Shared/Buttons/Favorite.svelte";
 </script>
 
-<div class="card">
+<a href="/" class="card">
     <div class="button">
         <FavoriteButton></FavoriteButton>
     </div>
     <img src={image} alt="placeholder">
-</div>
+</a>
 
 <style lang=scss>
     .card {
