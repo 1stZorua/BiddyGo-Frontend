@@ -1,5 +1,5 @@
 <script lang=ts>
-    import { headerLinks } from './config';
+    import { headerLinks } from "./config";
 
     let toggled: boolean = false;
 </script>
