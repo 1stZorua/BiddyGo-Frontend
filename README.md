@@ -12,7 +12,7 @@ BiddyGo is an auction platform that provides a seamless and enjoyable experience
 
 - C#
 - Docker
-- HTML, CSS, JS, TS
+- HTML, CSS (SCSS), JS, TS
 - Svelte
 - Vite
 

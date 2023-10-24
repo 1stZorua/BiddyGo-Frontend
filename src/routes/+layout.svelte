@@ -1,9 +1,9 @@
 <script>
-    import Header from '../components/Header.svelte';
-    import Wrapper from '../components/Wrapper.svelte';
+    import { Header, Wrapper, Footer } from "../components/index.ts";
 </script>
 
 <Wrapper>
     <Header></Header>
     <slot></slot>
 </Wrapper>
+<Footer></Footer>

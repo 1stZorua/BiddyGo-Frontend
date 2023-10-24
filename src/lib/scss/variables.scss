@@ -1,0 +1,138 @@
+// Importing Fonts
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+// Font Families
+$font-family-primary: 'Poppins', sans-serif;
+$font-family-secondary: 'DM Mono', sans-serif;
+
+// Font Weights
+$font-weight-thin: 100;
+$font-weight-extraLight: 200;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semiBold: 600;
+$font-weight-bold: 700;
+$font-weight-extraBold: 800;
+$font-weight-black: 900;
+
+// Font Sizes 
+$font-size-base: #{"min(max(12px, 3.5vw), 20px)"}; /* 20px (1.25 * 16px) */
+$font-size-small: #{"min(max(16px, 4vw), 24px)"};
+$font-size-medium: #{"min(max(20px, 4vw), 32px)"}; /* 32px (2 * 16px) */
+$font-size-heading: #{"min(max(24px, 4vw), 40px)"}; /* 40px (2.5 * 16px) */
+$font-size-hero: #{"min(max(28px, 4vw), 64px)"}; /* 64px (4 * 16px) */
+
+// Text Colors
+$primary: black;
+$secondary: white;
+$accent-primary: #57C5B6;
+$accent-secondary: #159895;
+$accent-tertiary: #1A5F7A;
+$accent-quaternary: #002B5B;
+$gray-light: #efefef;
+$gray-regular: #B7B7B7;
+$gray-dark: #7A7A7A;
+
+// Logo
+$logo-font-family: $font-family-primary;
+$logo-font-size: $font-size-heading;
+$logo-font-weight: $font-weight-semiBold;
+$logo-accent: $accent-secondary;
+
+// Search 
+$search-padding: 10px 20px;
+
+// Body
+$background-color: $secondary;
+
+// Sections
+$section-light: rgb(87, 197, 182, 0.7);
+$section-regular: $accent-primary;
+$section-dark: $accent-quaternary;
+$section-text-gap: 30px;
+$section-height-small: 300px;
+$section-height-normal: 750px;
+$section-margin-top-medium: 220px;
+$section-margin-top-regular: calc($section-margin-top-medium * 0.25);
+$section-margin-top-small: calc($section-margin-top-regular * 0.225);
+
+// Wrapper
+$wrapper-gap: 50px;
+$wrapper-margin-inline-small: 30px;
+$wrapper-margin-inline-normal: 50px;
+$wrapper-margin-bottom: 30px;
+$wrapper-margin-normal: $wrapper-margin-bottom $wrapper-margin-inline-normal 0 $wrapper-margin-inline-normal; 
+$wrapper-margin-small: $wrapper-margin-bottom $wrapper-margin-inline-small 0 $wrapper-margin-inline-small; 
+
+// Header 
+$header-height: 60px;
+$header-margin-bottom: 0px;
+
+// Footer
+$footer-background-color: $primary;
+$footer-heading-color: $secondary;
+$footer-base-color: $gray-light;
+$footer-height: 875px;
+
+// Button 
+$btn-font-size: $font-size-base;
+$btn-primary: $primary;
+$btn-secondary: $secondary;
+$btn-tertiary: $accent-secondary;
+$btn-quaternary: $accent-primary;
+$btn-gap: 20px;
+$btn-height: 60px;
+$btn-padding-inline: 45px; /* 12.5px (0.781 * 16px), 45px (2.8125 * 16px) */
+$btn-border-size: 0.140625rem; /* 2.25px (0.140625 * 16px) */
+$btn-primary-border: $btn-border-size solid $btn-primary; 
+$btn-secondary-border: $btn-border-size solid $btn-tertiary;
+$btn-option-border: $btn-border-size solid $gray-regular;
+$btn-border-radius-small: 0.625rem; /* 10px (0.625 * 16px) */
+$btn-border-radius-normal: 1.25rem; /* 20px (1.25 * 16px) */
+$btn-border-radius-medium: 1.875rem; /* 30px (1.875 * 16px) */
+$btn-border-radius-large: 2.5rem; /* 40px (2.5 * 16px) */
+$btn-border-radius-rounded: 3.125rem; /* 50px (3.125 * 16px) */
+$btn-border-radius-full: 6.25rem; /* 100px (6.25 * 16px) */
+$btn-border-radius-custom: 2.5rem 0rem; /* 40px (2.5 * 16px), 0px (0 * 16px) */
+
+// Line 
+$line-width: 50px;
+$line-height: $btn-border-size;
+$line-gap: $btn-gap;
+
+// Input
+$input-font-size: 1rem; /* 16px (1 * 16px) */
+
+// Icons
+$icon-primary: $primary;
+$icon-secondary: $secondary;
+$icon-accent-primary: #128071;
+$icon-accent-secondary: #0059BD;
+$icon-border-color: $primary;
+$icon-size: $btn-height; /* 10px (0.625 * 16px) 20px (1.25 * 16px) */
+
+// Category
+$card-background-color: #1B607B;
+
+// Screen
+$screen-height: calc(100vmin - $header-height - $header-margin-bottom - $wrapper-margin-bottom);
+$screen-width: 100rem; /* 1600px (100 * 16px) */
+$screen-small: 576px;
+$screen-medium: 768px;
+$screen-large: 992px;
+$screen-extraLarge: 1200px;
+$screen-wide: 1440px;
+
+// Transitions
+$transition-scale: 1.25;
+$transition-duration: 1s;
+$transition-ultraFast: 0.01s ease-in;
+$transition-fast: 0.25s ease-in-out;
+$transition-normal: 0.5s ease-in-out;
+$transition-medium: 0.75s ease-in-out;
+$transition-slow: 1s ease-in-out;
+
+// Skeleton
+$skeleton-background-color: linear-gradient(90deg, #EEEEEE 25%, #DEDEDE 50%, #EEEEEE 75%);
+$skeleton-animation: loading 2s linear infinite;
