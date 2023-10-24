@@ -5,6 +5,7 @@
         display: flex;
         flex-direction: column;
         gap: $wrapper-gap;
+        scroll-margin-top: $wrapper-margin-inline-normal;
         margin: $wrapper-margin-normal;
         max-width: $screen-width;
         width: calc(100% - $wrapper-margin-inline-normal * 2);
