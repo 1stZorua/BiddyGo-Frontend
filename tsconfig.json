@@ -3,6 +3,9 @@
 	"compilerOptions": {
 		"allowJs": true,
 		"checkJs": true,
+		"composite": true,
+		"emitDeclarationOnly": true,
+		"allowImportingTsExtensions": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
