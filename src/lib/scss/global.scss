@@ -43,6 +43,10 @@
     font-size: $font-size-base;
 }
 
+:global(i) {
+    font-size: $font-size-small;
+}
+
 :global(input) {
     font-size: $input-font-size;
 }
@@ -55,8 +59,31 @@
     text-decoration: none;
 }
 
+:global([data-active="true"]) {
+    animation: fadeIn 0.5s forwards; 
+}
+
+@media(max-width: $screen-wide) {
+    :global(body:has(.auction-bar)) { 
+        // :global(.footer) {
+        //     display: none!important;
+        // }
+
+        padding-bottom: 10%;
+    }
+}
+
 @media(max-width: $screen-extraLarge) {
     :global(body.menu-open) {
         overflow-y: hidden;
+    }
+}
+
+@keyframes loading {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
     }
 }
