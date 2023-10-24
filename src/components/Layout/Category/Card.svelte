@@ -1,27 +1,47 @@
-<script lang>
-    import SecondaryText from "../../Shared/Text/Secondary.svelte";
-    /** @type {{
-        image: string,
-        title: string
-    }} */
-    export let categoryData;
-
+<script lang=ts>
+	import { onMount } from "svelte";
+	import { sendRequest } from "$lib/functions/request.ts";
+    import scrollTo from "$lib/functions/scroll.ts";
+    import type { Image } from "$lib/types/types";
+    import { SecondaryText } from "../../index.ts";
+    
+    let loaded: boolean = false;
     let color = '#FBB763';
 
+    export let active: boolean = true;
+    export let categoryData: {
+        imageId: number,
+        image?: Image | null,
+        title: string
+    } = { imageId: 0, title: "" };
+    
+    onMount(async () => {
+        if (!active) return;
+        categoryData.image = await sendRequest(`/api/Image/${categoryData.imageId}`, "GET");
+        loaded = true;
+    });
 </script>
 
-<a href="/" class="card" style="--color: {color};">
-    <div class="top">
-        <SecondaryText --color="white" --text-transform="none">
-            {categoryData.title}
-        </SecondaryText>
-    </div>
-    <div class="right">
-        <img src={categoryData.image} alt={categoryData.title}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 210">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M172 0H0V212H172V0ZM86 166C119.137 166 146 139.137 146 106C146 72.8629 119.137 46 86 46C52.8629 46 26 72.8629 26 106C26 139.137 52.8629 166 86 166Z" fill={color}/>
-        </svg>
-    </div>
+<a 
+    href="#{categoryData.title}" 
+    class="card" 
+    style="--color: {color};"
+    data-active={loaded}
+    on:click={(e) => { e.preventDefault(); scrollTo(categoryData.title, true) }}
+>
+    {#if loaded}
+        <div class="top">
+            <SecondaryText --color="white" --text-transform="none">
+                {categoryData.title}
+            </SecondaryText>
+        </div>
+        <div class="right">
+            <img src={"data:image/jpeg;base64," + categoryData.image?.fileContents} alt={categoryData.title}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 210">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M172 0H0V212H172V0ZM86 166C119.137 166 146 139.137 146 106C146 72.8629 119.137 46 86 46C52.8629 46 26 72.8629 26 106C26 139.137 52.8629 166 86 166Z" fill={color}/>
+            </svg>
+        </div>
+    {/if}
 </a>
 
 <style lang=scss>
@@ -53,6 +73,19 @@
             .right img {
                 scale: calc($transition-scale + 0.5);
             }
+        }
+    }
+
+    .card[data-active="false"] {
+        background: $skeleton-background-color;
+        background-size: 200% 100%; 
+        animation: $skeleton-animation;
+        height: 210px;
+        min-width: 450px;
+        border-radius: $btn-border-radius-normal;
+
+        &::before {
+            display: none;
         }
     }
 
@@ -117,7 +150,7 @@
             padding-top: 2px;
             bottom: -2px;
             left: 0;
-            background: var(--color);
+            // background: var(--color);
             border-radius: 0 0 $btn-border-radius-normal $btn-border-radius-normal;
             z-index: 0;
         }
