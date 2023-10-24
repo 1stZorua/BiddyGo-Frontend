@@ -4,6 +4,9 @@
 
 <style lang=scss>
     button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background: $btn-secondary;
         color: $btn-primary;
         width: $btn-height;
