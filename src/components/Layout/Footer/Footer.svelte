@@ -1,9 +1,7 @@
-<script>
-	import Logo from "../../Shared/Objects/Logo.svelte";
-	import SecondaryButton from "../../Shared/Buttons/Secondary.svelte";
-	import NavigationSection from "./NavigationSection.svelte";
+<script lang=ts>
     import { navigationLinks } from "./config"
-	
+    import { Logo, SecondaryButton } from "../../index.ts";
+	import NavigationSection from "./NavigationSection.svelte";
 </script>
 
 <section class="footer">
@@ -23,16 +21,16 @@
             <div class="socials-wrapper">
                 <div class="socials">
                     <SecondaryButton --color="white" --border-color="#B7B7B7">
-                        <i class="fa-brands fa-facebook"></i>
+                        <a class="icon" href="/"><i class="fa-brands fa-facebook"></i></a>
                     </SecondaryButton>
                     <SecondaryButton --color="white" --border-color="#B7B7B7">
-                        <i class="fa-brands fa-twitter"></i>
+                        <a class="icon" href="/"><i class="fa-brands fa-twitter"></i></a>
                     </SecondaryButton>
                     <SecondaryButton --color="white" --border-color="#B7B7B7">
-                        <i class="fa-brands fa-pinterest"></i>
+                        <a class="icon" href="/"><i class="fa-brands fa-pinterest"></i></a>
                     </SecondaryButton>
                     <SecondaryButton --color="white" --border-color="#B7B7B7">
-                        <i class="fa-brands fa-instagram"></i>
+                        <a class="icon" href="/"><i class="fa-brands fa-instagram"></i></a>
                     </SecondaryButton>
                 </div>
                 <Logo></Logo>
@@ -52,9 +50,11 @@
     .footer {
         display: flex;
         justify-content: center;
+        position: relative;
         width: 100%;
         background: $footer-background-color;
         margin-top: 120px;
+        z-index: 0;
     }
 
     .container {
@@ -73,7 +73,7 @@
         color: white;
     }
 
-    a {
+    a:not(.icon) {
         width: max-content;
         color: $gray-regular;
         transition: 
@@ -118,6 +118,7 @@
         position: absolute;
         right: 20px;
         color: $accent-secondary;
+        z-index: -1;
         transition:
             color $transition-fast;
     }
@@ -152,6 +153,11 @@
     .socials {
         display: flex;
         gap: $btn-gap;
+    }
+
+    .socials .icon {
+        display: flex;
+        color: $btn-secondary;
     }
 
     .links {
