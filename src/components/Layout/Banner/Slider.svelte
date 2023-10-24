@@ -1,7 +1,6 @@
 <script>
+    import { SecondaryText, Square } from "../../index.ts";
     import comic from "$lib/img/comic.png";
-    import SecondaryText from "../../Shared/Text/Secondary.svelte";
-	import Square from "../../Shared/Shapes/Square.svelte";
 </script>
 
 <div class="slider-container">
