@@ -1,11 +1,21 @@
 <script lang=ts>
+	import { Subheading } from "../../index.ts";
+
+    export let active: boolean = true;
     export let href: string ="/";
 </script>
 
-<a href={href}>
-    <slot></slot>
-    <i class="fa-solid fa-arrow-right-long"></i>
-</a>
+{#if active}
+    <a href={href}>
+        <slot></slot>
+        <i class="fa-solid fa-arrow-right-long"></i>
+    </a>
+{:else}
+    <Subheading active={active}>
+        <slot></slot>
+        <span>ic</span>
+    </Subheading>
+{/if}
 
 <style lang=scss>
     a {
