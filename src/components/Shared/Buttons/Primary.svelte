@@ -1,4 +1,8 @@
-<button>
+<script lang=ts>
+    export let active: boolean = true;
+</script>
+
+<button data-active={active}>
     <span>
         <slot></slot>
     </span>
@@ -13,6 +17,7 @@
         overflow: hidden;
         position: relative;
         z-index: 0;
+        width: var(--width, max-content);
         background: var(--secondary);
         border: $btn-primary-border;
         border-radius: $btn-border-radius-rounded;
@@ -42,8 +47,20 @@
         }
     }
 
+    [data-active="false"] {
+        background: $skeleton-background-color;
+        background-size: 200% 100%; 
+        animation: $skeleton-animation;
+        border: transparent;
+        pointer-events: none;
+
+        span {
+            color: transparent;
+        }
+    }
+
     span {
-        color: white;
-        mix-blend-mode: difference;
+        color: var(--color, white);
+        mix-blend-mode: var(--mix-blend-mode, difference);
     }
 </style>
