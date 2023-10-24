@@ -1,5 +1,5 @@
 <script>
-    import Heading from "../../Shared/Text/Heading.svelte";
+    import { Heading } from "../../index.ts";
     import appstore from "$lib/img/appstore.png";
     import playstore from "$lib/img/playstore.png";
     import laptop from "$lib/img/laptop.png";
@@ -13,12 +13,12 @@
             <p>Explore the extraordinary at your fingertips, whenever, wherever.</p>
         </div>
         <div class="buttons">
-            <button>
+            <a href="/">
                 <img src={appstore} alt="app store">
-            </button>
-            <button>
+            </a>
+            <a href="/">
                 <img src={playstore} alt="google play">
-            </button>
+            </a>
         </div>
     </div>
     <div class="display">
@@ -50,15 +50,6 @@
         gap: $btn-gap;
     }
 
-    button {
-        border: none;
-        background: none;
-        
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
     .display {
         display: flex;
         align-items: center;
@@ -88,7 +79,6 @@
         }
     }
 
-    
     @media (max-width: $screen-wide) {
         .mobile-app {
             flex-direction: column;
@@ -135,6 +125,5 @@
                 width: 180px;
             }
         }
-        
     }
 </style>
