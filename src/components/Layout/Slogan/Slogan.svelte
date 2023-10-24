@@ -1,8 +1,6 @@
-<script>
-	import Subtitle from "../../Shared/Text/Subtitle.svelte";
+<script> 
+    import { Subtitle, SecondaryText, Square } from "../../index.ts";
     import collaboration from "$lib/img/collaboration.png";
-    import Square from "../../Shared/Shapes/Square.svelte";
-    import SecondaryText from "../../Shared/Text/Secondary.svelte";
 </script>
 
 <section class="slogan">
@@ -29,7 +27,7 @@
     <div class="text">
         <Subtitle --line-color="white">Pioneering auction excellence</Subtitle>
         <div class="hero">
-            <h1>Building Biddy</h1>
+            <h1>Building Biddy<b>Go</b></h1>
             <h1>Together</h1>
         </div>
         <p>Collaboration and dedication have been at the heart of BiddyGo since day one. Join us in shaping the future of auctions, where every partnership leads to extraordinary opportunities.</p>
@@ -142,8 +140,7 @@
     h1  {
         font-size: $font-size-hero;
 
-        &:first-child::after {
-            content: "Go";
+        b {
             color: $logo-accent;
         }
 
@@ -184,9 +181,10 @@
         }
 
         h1 {
-            &:first-child::after {
+            b {
                 color: $accent-tertiary;
             }
+
             &:last-child {
                 color: $accent-quaternary;
             }
