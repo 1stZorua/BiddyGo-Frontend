@@ -1,9 +1,5 @@
 <script>
-    import Banner from "../components/Layout/Banner/Banner.svelte";
-	import Recommendations from "../components/Layout/Recommendations/Recommendations.svelte";
-    import Browse from "../components/Layout/Browse/Browse.svelte";
-    import Slogan from "../components/Layout/Slogan/Slogan.svelte";
-    import MobileApp from "../components/Layout/Mobile App/MobileApp.svelte";
+    import { Banner, Recommendations, Browse, Slogan, MobileApp } from "../components/index.ts";
 </script>
 
 <Banner></Banner>
