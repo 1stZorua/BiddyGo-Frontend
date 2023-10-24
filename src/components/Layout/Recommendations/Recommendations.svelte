@@ -1,13 +1,12 @@
 <script>
-    import Heading from "../../Shared/Text/Heading.svelte";
-    import TertiaryButton from "../../Shared/Buttons/Tertiary.svelte";
+    import { Heading, TertiaryButton } from "../../index.ts";
     import Card from "./Card.svelte";
-    import ring from '$lib/img/ring.png';
-    import bank from '$lib/img/bank.png';
-    import car from '$lib/img/car.png';
-    import coin from '$lib/img/coin.png';
-    import controller from '$lib/img/controller.png';
-    import pokemon from '$lib/img/pokemon.png';
+    import ring from "$lib/img/ring.png";
+    import bank from "$lib/img/bank.png";
+    import car from "$lib/img/car.png";
+    import coin from "$lib/img/coin.png";
+    import controller from "$lib/img/controller.png";
+    import pokemon from "$lib/img/pokemon.png";
 </script>
 
 <section class="recommendations">
