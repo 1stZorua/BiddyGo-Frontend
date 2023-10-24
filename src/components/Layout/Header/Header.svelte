@@ -1,11 +1,10 @@
 <script lang=ts>
-    import Logo from '../../Shared/Objects/Logo.svelte';
-	import HamburgerMenu from './HamburgerMenu.svelte';
-	import PrimaryButton from '../../Shared/Buttons/Primary.svelte';
-    import { headerLinks } from './config';
-
+    import { headerLinks } from "./config";
+    import { Logo, PrimaryButton } from "../../index.ts";
+	import HamburgerMenu from "./HamburgerMenu.svelte";
+    
     let searchElement: HTMLInputElement;
-    function handleSearchClick() { searchElement.classList.toggle('is-active'); }
+    function handleSearchClick() { searchElement.classList.toggle("is-active"); }
 </script>
 
 <header>
