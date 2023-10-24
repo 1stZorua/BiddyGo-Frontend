@@ -1,41 +1,53 @@
-<script>
-	import Heading from "../../Shared/Text/Heading.svelte";
-    import SecondaryText from "../../Shared/Text/Secondary.svelte";
+<script lang=ts>
+    import { onMount } from "svelte";
+    import { sendRequest } from "$lib/functions/request";
+    import type { Category, SubCategory } from "$lib/types/types.ts";
+    import { Heading, Path } from "../../index.ts";
     import Card from "./Card.svelte";
-    import ptcg from "$lib/img/ptcg.png";
-    import lpcm from "$lib/img/lpcm.png";
-    import vgc from "$lib/img/vgc.png";
+
+    let category: Category;
+    let subcategories: Array<SubCategory> = []
+    let loaded: boolean = false;
+
+    export let categoryId: string;
+
+    onMount(async () => {
+        category = await sendRequest(`/api/Category/${categoryId}`, "GET");
+        subcategories = await sendRequest(`/api/Category/subcategories/${categoryId}`, "GET");
+        loaded = true;
+    });
 </script>
 
-<section class="categories">
-    <div class="text">
-        <div class="route">
-            <SecondaryText --color="#7A7A7A" --text-transform="normal">BiddyGo >&nbsp;</SecondaryText>
-            <SecondaryText --color="#B7B7B7" --text-transform="normal">Entertainment, Cards & Games</SecondaryText>
+{#if loaded}
+    <section class="categories">
+        <div class="text">
+            <Path categories={[category.name]}></Path>
+            <Heading>{category.name}</Heading>
         </div>
-        <Heading>Entertainment, Cards & Games</Heading>
-    </div>
-    <div class="container">
-        <Card categoryData={
-            {
-                image: ptcg, 
-                title: "Pokemon & Trading Cards"
-            }
-        }></Card>
-        <Card categoryData={
-            {
-                image: lpcm, 
-                title: "LEGO & Pop Culture Merchandise"
-            }
-        }></Card>
-        <Card categoryData={
-            {
-                image: vgc, 
-                title: "Video Games & Computers"
-            }
-        }></Card>
-    </div>
-</section>
+        <div class="container">
+            {#each subcategories as subcategory}
+                <Card categoryData={
+                    {
+                        imageId: subcategory.imageId, 
+                        title: subcategory.name
+                    }
+                }></Card>
+            {/each}
+        </div>
+    </section>
+{:else}
+    <section class="categories">
+        <div class="text">
+            <Path active={loaded} categories={["BiddyGo > Entertainment, Cards & Games"]}></Path>
+            <Heading active={loaded}>Entertainment, Cards & Games</Heading>
+        </div>
+        <div class="container">
+            {#each Array(3) as _}
+                <Card active={loaded}></Card>
+            {/each}
+        </div>
+    </section>
+{/if}
 
 <style lang=scss>
     .categories {
