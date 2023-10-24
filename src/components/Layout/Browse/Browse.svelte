@@ -1,5 +1,5 @@
 <script lang=ts>
-    import Heading from "../../Shared/Text/Heading.svelte";
+    import { Heading } from "../../index.ts";
 </script>
 
 <section id="browse" class="browse">
