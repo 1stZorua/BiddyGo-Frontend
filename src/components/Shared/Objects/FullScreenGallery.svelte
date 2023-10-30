@@ -173,7 +173,9 @@
         }
 
         img {
+            height: 20vw;
             width: 20vw;
+            object-fit: cover;
 
             &:hover {
                 cursor: pointer;
