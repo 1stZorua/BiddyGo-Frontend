@@ -4,7 +4,7 @@ export async function sendRequest<T>(
     data = null
 ): Promise<T> {
 
-    const apiUrl = 'https://localhost:32772';
+    const apiUrl = 'https://localhost:32768';
     url = `${apiUrl}${url}`;
 
     const options = {
