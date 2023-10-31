@@ -1,12 +1,13 @@
 <script lang=ts>
     export let active: boolean = true;
     export let value: number = 0;
+    export let onClick: (value: number) => void = () => {};
 </script>
-
 
 <button 
     data-active={active}
     value={value}
+    on:click={() => onClick(value)}
 >
     <span>
         <slot></slot>
