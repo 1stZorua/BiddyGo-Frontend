@@ -26,10 +26,10 @@
         </div>
         <div class="container">
             {#each subcategories as subcategory}
-                <Card categoryData={
+                <Card subCategoryData={
                     {
                         imageId: subcategory.imageId, 
-                        title: subcategory.name
+                        name: subcategory.name
                     }
                 }></Card>
             {/each}
