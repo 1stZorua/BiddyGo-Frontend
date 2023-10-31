@@ -2,27 +2,20 @@
     import { onMount } from "svelte";
 	import { sendRequest } from "$lib/functions/request";
     import truncateText from "$lib/functions/truncateText.ts";
-    import type { AuctionListing, Image } from "$lib/types/types";
+    import type { AuctionListing, Bid, Image } from "$lib/types/types";
+	import { defaultAuctionListing } from "$lib/types/defaults.ts";
     import { SecondaryText, SmallText, MediumText } from "../../index.ts";
 
     let thumbnailImage: Image;
+    let currentBid: Bid;
 
     export let active: boolean = true;
-    export let auctionListing: AuctionListing = {
-        id: 0,
-        subCategoryId: 0,
-        title: "The Pokemon Mystery box - Blastoise",
-        description: "placeholder",
-        startingBid: 20,
-        reservePrice: 0,
-        startTime: new Date('2023-07-11T00:00:00'),
-        endTime: new Date('2023-07-11T00:00:00'),
-        sellerId: 0
-    };
+    export let auctionListing: AuctionListing = defaultAuctionListing;
 
     onMount(async() => {
         if (!active) return;
         thumbnailImage = await sendRequest(`/api/AuctionListing/thumbnail/${auctionListing.id}`, "GET");
+        currentBid = await sendRequest(`/api/Bid/highest/${auctionListing.id}`, "GET");
     });
 </script>
 
@@ -38,7 +31,7 @@
         <SmallText active={active}>{truncateText(auctionListing.title, 50)}</SmallText>
         <div>
             <SecondaryText active={active} --color="#7A7A7A">Current Bid</SecondaryText>
-            <MediumText active={active}>&euro; {auctionListing.startingBid}</MediumText>
+            <MediumText active={currentBid ? true : false}>&euro; {currentBid ? currentBid.amount : 0}</MediumText>
         </div>
         <SecondaryText active={active} --color="#7A7A7A" --font-family="Poppins" --font-weight="500" --text-transform="normal">{auctionListing.startTime} left</SecondaryText>
     </div>
