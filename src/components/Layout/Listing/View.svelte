@@ -2,23 +2,21 @@
     import { page } from "$app/stores";
 	import { onMount } from "svelte";
 	import { sendRequest } from "$lib/functions/request";
+    import useSignalRHub from "$lib/functions/signalR.ts";
+    import { placeBid } from "$lib/functions/placeBid.ts";
     import { fullscreenGallery } from "../../../stores/galleryStore.ts";
-	import type { AuctionListing, Image } from "$lib/types/types.ts";
+	import type { AuctionListing, Bid, Image } from "$lib/types/types.ts";
+	import { defaultAuctionListing, defaultBid } from "$lib/types/defaults.ts";
     import { Heading, SecondaryText, Subheading, FilterButton, OptionButton, PrimaryButton, Input, FullScreenGallery, Gallery, MobileGallery, Path, Subtitle, MediumText, SmallText } from "../../index.ts";
 
-    let auctionListing: AuctionListing = {
-        id: 0,
-        subCategoryId: 0,
-        title: "The Pokemon Company Mystery box - Blastoise",
-        description: "placeholder",
-        startingBid: 20,
-        reservePrice: 0,
-        startTime: new Date('2023-07-11T00:00:00'),
-        endTime: new Date('2023-07-11T00:00:00'),
-        sellerId: 0
-    };
+    let hubConnection: signalR.HubConnection;
+
+    let auctionListing: AuctionListing = defaultAuctionListing;
     let auctionListingImages: Array<Image> = [];
+    let currentBid: Bid = defaultBid;
     let loaded: boolean = false;
+
+    let bidValue = 0;
     
     let activeButton: number = 1;
     let tablistContent: HTMLDivElement;
@@ -30,12 +28,37 @@
         tablistContent.querySelector(".active")?.classList.remove("active");
         [...tablistContent.children][index - 1].classList.add("active"); 
     }
+
+    function onBidClick(value: number) {
+        bidValue = value;
+    }
+
+    async function onBidSubmit(e: SubmitEvent) {
+        e.preventDefault();
+
+        const formData = new FormData(e.target as HTMLFormElement);
+        const value = parseFloat(formData.get("bidValue") as string);
+ 
+        const bid: Bid = {
+            id: "",
+            auction_listing_id: auctionListing.id,
+            bidder_id: 1,
+            amount: value ? value : 0,
+            time: new Date(Date.now())
+        }
+
+        await sendRequest<Bid>(`/api/Bid`, "POST", bid);
+        await placeBid(hubConnection, bid.auction_listing_id, bid.amount)
+    }
     
     export let auctionListingId: string;
     
     onMount(async () => {
+        hubConnection = await useSignalRHub<number>("https://localhost:32768/auction-hub", "NewBid", (data) => currentBid.amount = data);
+        await hubConnection.invoke("JoinGroup", `auction_${auctionListingId}`);
         auctionListing = await sendRequest(`/api/AuctionListing/${auctionListingId}`, "GET");
         auctionListingImages = await sendRequest(`/api/AuctionListing/images/${auctionListingId}`, "GET");
+        currentBid = await sendRequest(`/api/Bid/highest/${auctionListingId}`, "GET");
         loaded = true;
     });
 </script>
@@ -78,13 +101,20 @@
             </div>
             <div class="current-bid">
                 <SecondaryText active={loaded}>Current Bid</SecondaryText>
-                <Heading active={loaded}>&euro; 289</Heading>
+                <Heading active={loaded}>&euro; {currentBid.amount}</Heading>
             </div>
-            <form>
-                <Input active={loaded} inputType={"number"} min={299} name={"bidValue"} placeholder="&euro; 299 or up"></Input>
+            <form on:submit={onBidSubmit}>
+                <Input 
+                    active={loaded} 
+                    inputType={"number"} 
+                    min={299} 
+                    name={"bidValue"}  
+                    placeholder="&euro; 299 or up" 
+                    value={bidValue}
+                ></Input>
                 <div>
-                    <OptionButton active={loaded}>&euro; 299</OptionButton>
-                    <OptionButton active={loaded}>&euro; 309</OptionButton>
+                    <OptionButton active={loaded} value={299} onClick={onBidClick}>&euro; 299</OptionButton>
+                    <OptionButton active={loaded} value={309} onClick={onBidClick}>&euro; 309</OptionButton>
                     <PrimaryButton active={loaded} --primary="white" --secondary="black">Place Bid</PrimaryButton>
                 </div>
             </form>
