@@ -3,40 +3,41 @@
 	import { sendRequest } from "$lib/functions/request.ts";
     import scrollTo from "$lib/functions/scroll.ts";
     import type { Image } from "$lib/types/types";
+	import { defaultSubCategory } from "$lib/types/defaults.ts";
     import { SecondaryText } from "../../index.ts";
     
-    let loaded: boolean = false;
     let color = '#FBB763';
+    let loaded: boolean = false;
 
     export let active: boolean = true;
-    export let categoryData: {
+    export let subCategoryData: {
         imageId: number,
         image?: Image | null,
-        title: string
-    } = { imageId: 0, title: "" };
+        name: string
+    } = defaultSubCategory;
     
     onMount(async () => {
         if (!active) return;
-        categoryData.image = await sendRequest(`/api/Image/${categoryData.imageId}`, "GET");
+        subCategoryData.image = await sendRequest(`/api/Image/${subCategoryData.imageId}`, "GET");
         loaded = true;
     });
 </script>
 
 <a 
-    href="#{categoryData.title}" 
+    href="#{subCategoryData.name}" 
     class="card" 
     style="--color: {color};"
     data-active={loaded}
-    on:click={(e) => { e.preventDefault(); scrollTo(categoryData.title, true) }}
+    on:click={(e) => { e.preventDefault(); scrollTo(subCategoryData.name, true) }}
 >
     {#if loaded}
         <div class="top">
             <SecondaryText --color="white" --text-transform="none">
-                {categoryData.title}
+                {subCategoryData.name}
             </SecondaryText>
         </div>
         <div class="right">
-            <img src={"data:image/jpeg;base64," + categoryData.image?.fileContents} alt={categoryData.title}>
+            <img src={"data:image/jpeg;base64," + subCategoryData.image?.fileContents} alt={subCategoryData.name}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 210">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M172 0H0V212H172V0ZM86 166C119.137 166 146 139.137 146 106C146 72.8629 119.137 46 86 46C52.8629 46 26 72.8629 26 106C26 139.137 52.8629 166 86 166Z" fill={color}/>
             </svg>
