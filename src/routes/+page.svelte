@@ -1,4 +1,4 @@
-<script>
+<script lang=ts>
     import { Banner, Recommendations, Browse, Slogan, MobileApp } from "../components/index.ts";
 </script>
 
