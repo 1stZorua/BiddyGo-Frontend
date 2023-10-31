@@ -1,7 +1,7 @@
 export async function sendRequest<T>(
     url: string, 
-    method:string, 
-    data = null
+    method: string, 
+    data: T | null = null
 ): Promise<T> {
 
     const apiUrl = 'https://localhost:32768';
