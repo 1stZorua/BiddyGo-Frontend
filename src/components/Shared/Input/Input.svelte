@@ -4,6 +4,7 @@
     export let min: number = 0;
     export let name: string = "";
     export let placeholder: string = "";
+    export let value: number = 0;
 </script>
 
 <input 
@@ -12,6 +13,7 @@
     name={name} 
     min={min} 
     placeholder={placeholder} 
+    value={value != 0 ? value : ""}
     data-sveltekit-keepfocus
 >
 
@@ -31,7 +33,7 @@
         }
 
         &:hover, &:focus {
-            outline: 3px solid $gray-regular;
+            outline: $btn-border-size solid $gray-regular;
         }
     }
 
