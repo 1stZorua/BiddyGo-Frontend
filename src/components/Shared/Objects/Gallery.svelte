@@ -1,5 +1,4 @@
 <script lang=ts>
-	import { onMount } from "svelte";
     import { fullscreenGallery, activeIndex } from "../../../stores/galleryStore.ts";
 	import type { Image } from "$lib/types/types.ts";
     import { ZoomImage } from "../../index.ts";
@@ -27,10 +26,6 @@
 
     export let active: boolean = true;
     export let images: Array<Image> = [];
-    
-    $: {
-        console.log(images.length);
-    }
 </script>
 
 {#if active}
