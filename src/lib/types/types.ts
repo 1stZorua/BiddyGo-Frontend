@@ -1,15 +1,3 @@
-export interface Category {
-    id: number,
-    name: string
-}
-
-export interface SubCategory {
-    id: number,
-    name: string,
-    imageId: number,
-    categoryId: number
-}
-
 export interface AuctionListing {
     id: number,
     subCategoryId: number,
@@ -22,12 +10,32 @@ export interface AuctionListing {
     sellerId: number
 }
 
-export interface User {
+export interface Bid { 
+    id: string,
+    auction_listing_id: number,
+    bidder_id: number,
+    amount: number,
+    time: Date
+}
+
+export interface Category {
     id: number,
-    email: string
+    name: string
 }
 
 export interface Image {
     fileContents: string,
     contentType: string,
+}
+
+export interface SubCategory {
+    id: number,
+    name: string,
+    imageId: number,
+    categoryId: number
+}
+
+export interface User {
+    id: number,
+    email: string
 }
