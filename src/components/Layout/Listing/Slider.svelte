@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import { sendRequest } from "$lib/functions/request.ts";
 	import type { AuctionListing, SubCategory } from "$lib/types/types";
+	import { defaultSubCategory } from "$lib/types/defaults.ts";
     import { Subheading, TertiaryButton, Slider } from "../../index.ts";
 	import Card from "./Card.svelte";
 
@@ -9,12 +10,7 @@
     let loaded: boolean = false;
 
     export let active: boolean = true;
-    export let subCategory : SubCategory = {
-        id: 0,
-        name: "Pokemon & Trading Cards",
-        imageId: 0,
-        categoryId: 0,
-    };
+    export let subCategory : SubCategory = defaultSubCategory;
 
     onMount(async() => {
         if (!active) return;
