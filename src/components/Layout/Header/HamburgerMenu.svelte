@@ -2,15 +2,15 @@
     import { headerLinks } from "./config";
 
     let toggled: boolean = false;
+
+    function onMenuToggle() {
+        toggled = !toggled 
+        document.querySelector("body")?.classList.toggle("menu-opened", toggled);
+    }
 </script>
 
 <div class="container">
-    <button class:toggled={toggled} on:click={
-        () => { 
-            toggled = !toggled 
-            document.querySelector("body")?.classList.toggle("menu-opened", toggled);
-        }
-    }>
+    <button class:toggled={toggled} on:click={onMenuToggle}>
         <span></span>
         <span></span>
         <span></span>
