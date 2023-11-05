@@ -15,6 +15,7 @@ export interface Bid {
     auction_listing_id: number,
     bidder_id: number,
     amount: number,
+    formatted_amount?: string;
     time: Date
 }
 
