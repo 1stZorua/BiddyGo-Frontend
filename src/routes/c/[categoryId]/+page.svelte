@@ -1,7 +1,7 @@
 <script lang=ts>
     import { page } from "$app/stores";
 	import { onMount } from "svelte";
-	import { sendRequest } from "$lib/functions/request";
+    import { sendRequest } from "$lib/functions/index.ts";
 	import type { SubCategory } from "$lib/types/types";
     import { Categories, ListingSlider } from "../../../components/index.ts";
 
