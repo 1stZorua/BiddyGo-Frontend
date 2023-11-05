@@ -1,11 +1,12 @@
 <script lang=ts>
     import { headerLinks } from "./config";
+    import { scrollLock } from "../../../stores/index.ts"
 
     let toggled: boolean = false;
 
     function onMenuToggle() {
         toggled = !toggled 
-        document.querySelector("body")?.classList.toggle("menu-opened", toggled);
+        scrollLock.set(toggled);
     }
 </script>
 
@@ -15,7 +16,6 @@
         <span></span>
         <span></span>
     </button>
-
     <div class="menu" class:toggled={toggled}>
         <ul>
             {#each headerLinks as link (link)}
