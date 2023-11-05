@@ -1,7 +1,6 @@
 <script lang=ts>
 	import { onMount } from "svelte";
-	import { sendRequest } from "$lib/functions/request.ts";
-    import scrollTo from "$lib/functions/scroll.ts";
+    import { sendRequest, scrollTo } from "$lib/functions/index.ts";
     import type { Image } from "$lib/types/types";
 	import { defaultSubCategory } from "$lib/types/defaults.ts";
     import { SecondaryText } from "../../index.ts";
