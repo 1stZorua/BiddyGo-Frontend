@@ -34,7 +34,7 @@
     }
 }
 
-:global(body.menu-opened) {
+:global(body[data-scrollLock="true"]) { 
     overflow-y: hidden;
 }
 
@@ -63,18 +63,18 @@
     animation: fadeIn 0.5s forwards; 
 }
 
+:global(.hidden) {
+    display: none;
+}
+
 @media(max-width: $screen-wide) {
     :global(body:has(.auction-bar)) { 
-        // :global(.footer) {
-        //     display: none!important;
-        // }
-
         padding-bottom: 10%;
     }
 }
 
 @media(max-width: $screen-extraLarge) {
-    :global(body.menu-open) {
+    :global(body[data-scrollLock="true"]) {
         overflow-y: hidden;
     }
 }
