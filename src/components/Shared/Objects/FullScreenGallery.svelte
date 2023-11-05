@@ -1,7 +1,7 @@
 <script lang=ts>
-    import { onMount } from "svelte";
-    import { fullscreenGallery, activeIndex } from "../../../stores/galleryStore.ts";
+    import { onDestroy, onMount } from "svelte";
 	import type { Image } from "$lib/types/types.ts";
+    import { fullscreenGallery, activeIndex } from "../../../stores/index.ts"
     import { SecondaryText, Slider, SliderArrow } from "../../index.ts";
 
     let sliderContainer: HTMLDivElement;
@@ -36,6 +36,10 @@
         slider.scrollLeft += currentIndex * (slider.scrollWidth / images.length);
         slider.addEventListener("scroll", onSliderScroll);
     });
+
+    onDestroy(() => {
+        slider.removeEventListener("scroll", onSliderScroll);
+    })
 </script>
 
 <div class="gallery">
@@ -167,9 +171,17 @@
         left: 50%;
         transform: translateX(-50%);
 
+        > * {
+            display: flex;
+        }
+
         button {
             border: none;
             background: none;
+        }
+
+        div {
+            outline: $btn-border-size solid $accent-secondary;
         }
 
         img {
