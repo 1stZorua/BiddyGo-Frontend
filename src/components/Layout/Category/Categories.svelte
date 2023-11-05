@@ -1,19 +1,24 @@
 <script lang=ts>
     import { onMount } from "svelte";
-    import { sendRequest } from "$lib/functions/request";
+    import { fetchMultipleRequests } from "$lib/functions/index.ts";
     import type { Category, SubCategory } from "$lib/types/types.ts";
     import { Heading, Path } from "../../index.ts";
     import Card from "./Card.svelte";
 
     let category: Category;
-    let subcategories: Array<SubCategory> = []
+    let subcategories: SubCategory[] = []
     let loaded: boolean = false;
 
     export let categoryId: string;
 
     onMount(async () => {
-        category = await sendRequest(`/api/Category/${categoryId}`, "GET");
-        subcategories = await sendRequest(`/api/Category/subcategories/${categoryId}`, "GET");
+        const [categoryResponse, subcategoriesResponse] = await fetchMultipleRequests(
+            [
+                { url: `/api/Category/${categoryId}`, method: "GET" },
+                { url: `/api/Category/subcategories/${categoryId}`, method: "GET" }
+            ]
+        );
+        [category, subcategories] = [categoryResponse as Category, subcategoriesResponse as SubCategory[]];
         loaded = true;
     });
 </script>
