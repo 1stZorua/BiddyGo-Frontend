@@ -17,6 +17,7 @@ export const defaultBid: Bid = {
     auction_listing_id: 0,
     bidder_id: 0,
     amount: 0,
+    formatted_amount: "0",
     time: new Date(Date.now())
 };
 
