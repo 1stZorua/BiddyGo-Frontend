@@ -1,8 +1,9 @@
 <script lang=ts>
     export let active: boolean = true;
+    export let onClick: () => void = () => {};
 </script>
 
-<button data-active={active}>
+<button data-active={active} on:click={onClick}>
     <span>
         <slot></slot>
     </span>
@@ -22,6 +23,7 @@
         border: $btn-primary-border;
         border-radius: $btn-border-radius-rounded;
         padding-inline: $btn-padding-inline;
+        white-space: nowrap;
         height: $btn-height;
 
         &::after {
@@ -62,5 +64,11 @@
     span {
         color: var(--color, white);
         mix-blend-mode: var(--mix-blend-mode, difference);
+    }
+
+    @media (max-width: $screen-extraLarge) { 
+        button {
+            width: var(--small-width, max-content);
+        }
     }
 </style>
