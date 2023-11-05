@@ -5,6 +5,7 @@
     export let name: string = "";
     export let placeholder: string = "";
     export let value: number = 0;
+    export let onInput: (...args: any) => void = () => {};
 </script>
 
 <input 
@@ -15,6 +16,7 @@
     placeholder={placeholder} 
     value={value != 0 ? value : ""}
     data-sveltekit-keepfocus
+    on:input={onInput}
 >
 
 <style lang=scss>
