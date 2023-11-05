@@ -5,8 +5,10 @@ export { default as Browse } from "./Layout/Browse/Browse.svelte";
 export { default as Categories } from "./Layout/Category/Categories.svelte";
 export { default as Footer } from "./Layout/Footer/Footer.svelte";
 export { default as Header } from "./Layout/Header/Header.svelte";
-export { default as ListingSlider } from "./Layout/Listing/Slider.svelte";
+export { default as BidForm } from "./Layout/Listing/BidForm.svelte";
 export { default as Listing } from "./Layout/Listing/Card.svelte";
+export { default as BidHistory } from "./Layout/Listing/History.svelte";
+export { default as ListingSlider } from "./Layout/Listing/Slider.svelte";
 export { default as ViewListing } from "./Layout/Listing/View.svelte";
 export { default as MobileApp } from "./Layout/Mobile App/MobileApp.svelte";
 export { default as Recommendations } from "./Layout/Recommendations/Recommendations.svelte";
@@ -33,8 +35,11 @@ export { default as FullScreenGallery } from "./Shared/Objects/FullScreenGallery
 export { default as Gallery } from "./Shared/Objects/Gallery.svelte";
 export { default as Logo } from "./Shared/Objects/Logo.svelte";
 export { default as MobileGallery } from "./Shared/Objects/MobileGallery.svelte";
+export { default as Modal } from "./Shared/Objects/Modal.svelte";
+export { default as PageModal } from "./Shared/Objects/PageModal.svelte";
 export { default as Slider } from "./Shared/Objects/Slider.svelte";
 export { default as SliderArrow } from "./Shared/Objects/SliderArrow.svelte";
+export { default as Tablist } from "./Shared/Objects/Tablist.svelte";
 export { default as ZoomImage } from "./Shared/Objects/ZoomImage.svelte";
 
 // Shapes
