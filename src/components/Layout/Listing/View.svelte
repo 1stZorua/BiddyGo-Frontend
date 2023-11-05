@@ -1,66 +1,47 @@
 <script lang=ts>
     import { page } from "$app/stores";
-	import { onMount } from "svelte";
-	import { sendRequest } from "$lib/functions/request";
-    import useSignalRHub from "$lib/functions/signalR.ts";
-    import { placeBid } from "$lib/functions/placeBid.ts";
-    import { fullscreenGallery } from "../../../stores/galleryStore.ts";
+	import { onDestroy, onMount } from "svelte";
+    import { scale } from "svelte/transition";
+    import { fetchMultipleRequests, useSignalRHub, formatCurrency } from "$lib/functions/index.ts";
 	import type { AuctionListing, Bid, Image } from "$lib/types/types.ts";
 	import { defaultAuctionListing, defaultBid } from "$lib/types/defaults.ts";
-    import { Heading, SecondaryText, Subheading, FilterButton, OptionButton, PrimaryButton, Input, FullScreenGallery, Gallery, MobileGallery, Path, Subtitle, MediumText, SmallText } from "../../index.ts";
+    import { fullscreenGallery, connectToHub, disconnectFromHub, isPageModalOpen, invokeHubMethod } from "../../../stores/index.ts"
+    import { Heading, SecondaryText, Subheading, FilterButton, PrimaryButton, FullScreenGallery, Gallery, MobileGallery, Path, Subtitle, MediumText, SmallText, BidForm, PageModal, Tablist, BidHistory } from "../../index.ts";
 
-    let hubConnection: signalR.HubConnection;
-
-    let auctionListing: AuctionListing = defaultAuctionListing;
-    let auctionListingImages: Array<Image> = [];
-    let currentBid: Bid = defaultBid;
     let loaded: boolean = false;
+    let auctionListing: AuctionListing = defaultAuctionListing;
+    let auctionListingImages: Image[] = [];
+    let currentBid: Bid = defaultBid;
+    let bidHistory: Bid[] = [];
 
-    let bidValue = 0;
-    
-    let activeButton: number = 1;
-    let tablistContent: HTMLDivElement;
+    let activeTab = 0;
 
     const { categoryId, subCategoryId } = $page.params;
 
-    function onTabClick(index: number) {
-        activeButton = index;
-        tablistContent.querySelector(".active")?.classList.remove("active");
-        [...tablistContent.children][index - 1].classList.add("active"); 
-    }
-
-    function onBidClick(value: number) {
-        bidValue = value;
-    }
-
-    async function onBidSubmit(e: SubmitEvent) {
-        e.preventDefault();
-
-        const formData = new FormData(e.target as HTMLFormElement);
-        const value = parseFloat(formData.get("bidValue") as string);
- 
-        const bid: Bid = {
-            id: "",
-            auction_listing_id: auctionListing.id,
-            bidder_id: 1,
-            amount: value ? value : 0,
-            time: new Date(Date.now())
-        }
-
-        await sendRequest<Bid>(`/api/Bid`, "POST", bid);
-        await placeBid(hubConnection, bid.auction_listing_id, bid.amount)
-    }
-    
     export let auctionListingId: string;
+
+    $: currentBid.formatted_amount = formatCurrency(currentBid.amount);
     
     onMount(async () => {
-        hubConnection = await useSignalRHub<number>("https://localhost:32768/auction-hub", "NewBid", (data) => currentBid.amount = data);
-        await hubConnection.invoke("JoinGroup", `auction_${auctionListingId}`);
-        auctionListing = await sendRequest(`/api/AuctionListing/${auctionListingId}`, "GET");
-        auctionListingImages = await sendRequest(`/api/AuctionListing/images/${auctionListingId}`, "GET");
-        currentBid = await sendRequest(`/api/Bid/highest/${auctionListingId}`, "GET");
+        connectToHub(await useSignalRHub<number>("https://localhost:32768/auction-hub", "NewBid", (data) => currentBid.amount = data));
+        invokeHubMethod("JoinGroup", `auction_${auctionListingId}`)
+        console.log(currentBid);
+        const [auctionResponse, imagesResponse, bidResponse, bidHistoryResponse] = await fetchMultipleRequests(
+            [
+                { url: `/api/AuctionListing/${auctionListingId}`, method: "GET" },
+                { url: `/api/AuctionListing/images/${auctionListingId}`, method: "GET" },
+                { url: `/api/Bid/highest/${auctionListingId}`, method: "GET" },
+                { url: `/api/Bid/${auctionListingId}`, method: "GET" }
+            ]
+        );
+
+        [auctionListing, auctionListingImages, currentBid, bidHistory] = [auctionResponse as AuctionListing, imagesResponse as Image[], bidResponse as Bid, bidHistoryResponse as Bid[]]
         loaded = true;
     });
+
+    onDestroy(() => {
+        disconnectFromHub();
+    })
 </script>
 
 <section class="view">
@@ -86,8 +67,8 @@
         {/if}
         <div class="text">
             <div>
-                <Subtitle active={loaded}>NR. {auctionListing.id}</Subtitle>
-                <Subheading active={loaded}>{auctionListing.title}</Subheading>
+                <Subtitle active={loaded} --line-color="white" --screen-wide-color="black">NR. {auctionListing.id}</Subtitle>
+                <Subheading active={loaded} --color="white" --screen-wide-color="black" --font-weight="500">{auctionListing.title}</Subheading>
             </div>
             <div data-active={loaded} class="time-remaining">
                 {#if loaded}
@@ -101,50 +82,41 @@
             </div>
             <div class="current-bid">
                 <SecondaryText active={loaded}>Current Bid</SecondaryText>
-                <Heading active={loaded}>&euro; {currentBid.amount}</Heading>
+                <Heading active={loaded}>&euro; {currentBid.formatted_amount}</Heading>
             </div>
-            <form on:submit={onBidSubmit}>
-                <Input 
-                    active={loaded} 
-                    inputType={"number"} 
-                    min={299} 
-                    name={"bidValue"}  
-                    placeholder="&euro; 299 or up" 
-                    value={bidValue}
-                ></Input>
-                <div>
-                    <OptionButton active={loaded} value={299} onClick={onBidClick}>&euro; 299</OptionButton>
-                    <OptionButton active={loaded} value={309} onClick={onBidClick}>&euro; 309</OptionButton>
-                    <PrimaryButton active={loaded} --primary="white" --secondary="black">Place Bid</PrimaryButton>
-                </div>
-            </form>
+            <div class="form">
+                <BidForm active={loaded} currentBid={currentBid}></BidForm>
+            </div>
         </div>
     </div>
-    <div class="information">
-        <div class="tablist">
-            {#each Array("Description", "Shipping", "Bidding History", "Seller Information") as tab, index}
-                <FilterButton active={loaded} activeButton={activeButton} number={index + 1} onClick={onTabClick}>{tab}</FilterButton>
-            {/each}
+    <Tablist
+        active={loaded}
+        sections={Array("Description", "Shipping", "Bid History", "Seller Information")}
+    >
+        <div>
+            <Subheading active={loaded} --font-weight="500">{auctionListing.description}</Subheading>
         </div>
-        <div 
-            class="content" 
-            bind:this={tablistContent}
-        >
-            {#each Array(auctionListing.description, "Shipping", "Bidding History", "Seller Information") as content, index}
-                <div class={index === 0 ? "active" : ""}>
-                    <Subheading active={loaded}>{content}</Subheading>
-                </div>
-            {/each}
+        <div class="hidden">
+            <Subheading --font-weight="500">Shipping</Subheading>
         </div>
-    </div>
+        <div class="hidden">
+            <BidHistory bids={bidHistory}></BidHistory>
+        </div>
+        <div class="hidden">
+            <Subheading --font-weight="500">Seller Information</Subheading>
+        </div>
+    </Tablist>
     <div class="auction-bar">
         <div>
             <SecondaryText active={loaded}>Current Bid</SecondaryText>
-            <Heading active={loaded}>&euro; 289</Heading>
+            <Heading active={loaded}>&euro; {currentBid.formatted_amount}</Heading>
             <SmallText active={loaded}>1d 9u 24m 17s</SmallText>
         </div>
-        <PrimaryButton active={loaded} --primary="white" --secondary="black">Place Bid</PrimaryButton>
+        <PrimaryButton active={loaded} --primary="white" --secondary="black" onClick={() => isPageModalOpen.set(true)}>Place Bid</PrimaryButton>
     </div>
+    {#if $isPageModalOpen}
+        <PageModal currentBid={currentBid} bidHistory={bidHistory} thumbnailImage={auctionListingImages[0]}></PageModal>
+    {/if}
 </section>
 
 <style lang=scss>
@@ -165,6 +137,17 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+
+        &::before {
+            content: '';
+            position: absolute;
+            background: $section-light;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 400px;
+            margin-top: -25px;
+        }
     }
 
     .time-remaining{
@@ -173,7 +156,6 @@
         height: 140px;
         max-width: 550px;
         background: $secondary;
-        border: $btn-option-border;
         border-radius: $btn-border-radius-large 0 $btn-border-radius-large 0;
         padding: 30px;
 
@@ -189,38 +171,6 @@
         background-size: 200% 100%; 
         animation: $skeleton-animation;
         border: none;
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: $btn-gap;
-        max-width: 550px;
-
-        div {
-            display: flex;
-            justify-content: space-between;
-        }
-    }
-
-    .information {
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-    }
-
-    .tablist {
-        display: flex;
-        flex-wrap: wrap;
-        gap: $btn-gap;
-    }
-
-    .content div {
-        display: none;
-    }
-
-    .content div.active {
-        display: block;
     }
 
     .auction-bar {
@@ -246,9 +196,13 @@
         .text {
             gap: 50px;
 
-            > *:not(:first-child) {
+            > *:not(:first-child), &::before {
                 display: none;
             }
+        }
+
+        .form {
+            display: none;
         }
 
         .auction-bar {
