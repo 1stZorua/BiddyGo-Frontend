@@ -11,7 +11,7 @@
         display: flex;
         align-items: center;
         gap: $line-gap;
-        color: var(--line-color, $btn-primary);
+        color: var(--line-color, $primary);
         font-family: $font-family-secondary;
         font-weight: $font-weight-medium;
         text-transform: uppercase;
@@ -19,7 +19,7 @@
         &::before {
             content: '';
             width: $line-width;
-            background: var(--line-color, $btn-primary);
+            background: var(--line-color, $primary);
             height: $line-height;
             display: inline-block;
         }
@@ -33,6 +33,16 @@
 
         &::before {
             display: none;
+        }
+    }
+
+    @media(max-width: $screen-wide) {
+        span {
+            color: var(--screen-wide-color, $primary);
+
+            &::before {
+                background: var(--screen-wide-color, $primary);
+            }
         }
     }
 </style>
