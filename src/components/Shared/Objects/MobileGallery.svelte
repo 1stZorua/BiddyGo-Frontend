@@ -1,5 +1,5 @@
 <script lang=ts>
-    import { fullscreenGallery, activeIndex } from "../../../stores/galleryStore.ts";
+    import { fullscreenGallery, activeIndex } from "../../../stores/index.ts";
 	import type { Image } from "$lib/types/types.ts";
     import { Slider } from "../../index.ts";
 
@@ -53,6 +53,10 @@
     button {
         border: none;
         background: none;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     @media (max-width: $screen-large) {
