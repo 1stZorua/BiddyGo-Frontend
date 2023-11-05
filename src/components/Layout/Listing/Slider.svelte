@@ -1,6 +1,6 @@
 <script lang=ts>
 	import { onMount } from "svelte";
-	import { sendRequest } from "$lib/functions/request.ts";
+    import { sendRequest } from "$lib/functions/index.ts";
 	import type { AuctionListing, SubCategory } from "$lib/types/types";
 	import { defaultSubCategory } from "$lib/types/defaults.ts";
     import { Subheading, TertiaryButton, Slider } from "../../index.ts";
