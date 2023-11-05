@@ -1,7 +1,6 @@
 <script lang=ts>
     import { onMount } from "svelte";
-	import { sendRequest } from "$lib/functions/request";
-    import truncateText from "$lib/functions/truncateText.ts";
+    import { fetchMultipleRequests, formatCurrency, truncateText } from "$lib/functions/index.ts";
     import type { AuctionListing, Bid, Image } from "$lib/types/types";
 	import { defaultAuctionListing } from "$lib/types/defaults.ts";
     import { SecondaryText, SmallText, MediumText } from "../../index.ts";
@@ -14,8 +13,13 @@
 
     onMount(async() => {
         if (!active) return;
-        thumbnailImage = await sendRequest(`/api/AuctionListing/thumbnail/${auctionListing.id}`, "GET");
-        currentBid = await sendRequest(`/api/Bid/highest/${auctionListing.id}`, "GET");
+        const [bidResponse, thumbnailResponse] = await fetchMultipleRequests(
+            [
+                { url: `/api/Bid/highest/${auctionListing.id}`, method: "GET" },
+                { url: `/api/AuctionListing/thumbnail/${auctionListing.id}`, method: "GET" }
+            ]
+        );
+        [currentBid, thumbnailImage] = [bidResponse as Bid, thumbnailResponse as Image];
     });
 </script>
 
@@ -31,7 +35,7 @@
         <SmallText active={active}>{truncateText(auctionListing.title, 50)}</SmallText>
         <div>
             <SecondaryText active={active} --color="#7A7A7A">Current Bid</SecondaryText>
-            <MediumText active={currentBid ? true : false}>&euro; {currentBid ? currentBid.amount : 0}</MediumText>
+            <MediumText active={currentBid ? true : false}>&euro; {currentBid ? formatCurrency(currentBid.amount) : 0}</MediumText>
         </div>
         <SecondaryText active={active} --color="#7A7A7A" --font-family="Poppins" --font-weight="500" --text-transform="normal">{auctionListing.startTime} left</SecondaryText>
     </div>
