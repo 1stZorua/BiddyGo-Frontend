@@ -24,7 +24,8 @@
         background: none;
         border: $btn-option-border;
         padding-inline: $btn-padding-inline;
-        width: var(--width, max-content);
+        width: var(--width, 100%);
+        white-space: nowrap;
         height: $btn-height;
         font-weight: 500;
         transition: 
