@@ -82,7 +82,7 @@
                 <PrimaryButton --primary="black" --secondary="white" --small-width="100%" onClick={() => isModalOpen.set(false)}>Edit Bid</PrimaryButton>
                 <PrimaryButton --primary="white" --secondary="black" --small-width="100%" onClick={onConfirmBid}>Confirm Bid</PrimaryButton>
             </div>
-            <p slot="message">When you confirm your bid, it means you're committing to buy this item if you're the winning bidder</p>
+            <p slot="message">When you confirm your bid, it means you're committing to buy this item if you're the winning bidder.</p>
         </Modal>
     {/if}
 </section>
