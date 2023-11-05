@@ -26,6 +26,7 @@
         padding-inline: $btn-padding-inline;
         width: var(--width, max-content);
         height: $btn-height;
+        white-space: nowrap;
         font-weight: 500;
         transition: 
             border-color $transition-fast;
@@ -50,5 +51,11 @@
 
     span {
         color: var(--color, $btn-primary);
+    }
+
+    @media (max-width: $screen-extraLarge) { 
+        button {
+            width: var(--small-width, max-content);
+        }
     }
 </style>
