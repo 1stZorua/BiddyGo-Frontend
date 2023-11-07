@@ -13,25 +13,29 @@
 
     async function onBidSubmit(e: SubmitEvent) {
         e.preventDefault();
-        if (!bidValue) return /*handle error here*/;
- 
-        const bid: Bid = {
-            id: "",
-            auction_listing_id: currentBid.auction_listing_id,
-            bidder_id: 1,
-            amount: bidValue,
-            time: new Date(Date.now())
-        }
+        if (!bidValue) { 
+            console.log("Bid value is not set.");
+            return;
+        };
 
         await openModalPromise();
-
-        await sendRequest<Bid>(`/api/Bid`, "POST", bid);
-        await placeBid($hubConnection, bid.auction_listing_id, +bid.amount)
-
-        closeModalPromise();
     }
 
-    function onConfirmBid() {
+    async function onConfirmBid() {
+        if (bidValue > currentBid.amount) {
+            const bid: Bid = {
+                id: "",
+                auction_listing_id: auctionListingId,
+                bidder_id: 1,
+                amount: bidValue,
+                time: new Date(Date.now())
+            }
+
+            await sendRequest<Bid>(`/api/Bid`, "POST", bid);
+            await placeBid($hubConnection, bid.auction_listing_id, bid.bidder_id/*Temporary*/, +bid.amount)
+        } else {
+            console.log("Bid is the same as current bid.");
+        }
         closeModalPromise();
     }
 
@@ -39,6 +43,7 @@
 
     export let active: boolean = true;
     export let currentBid: Bid;
+    export let auctionListingId: number;
 </script>
 
 <section>
