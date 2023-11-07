@@ -1,12 +1,11 @@
 <script lang=ts>
     import { page } from "$app/stores";
 	import { onDestroy, onMount } from "svelte";
-    import { scale } from "svelte/transition";
     import { fetchMultipleRequests, useSignalRHub, formatCurrency } from "$lib/functions/index.ts";
 	import type { AuctionListing, Bid, Image } from "$lib/types/types.ts";
 	import { defaultAuctionListing, defaultBid } from "$lib/types/defaults.ts";
     import { fullscreenGallery, connectToHub, disconnectFromHub, isPageModalOpen, invokeHubMethod } from "../../../stores/index.ts"
-    import { Heading, SecondaryText, Subheading, FilterButton, PrimaryButton, FullScreenGallery, Gallery, MobileGallery, Path, Subtitle, MediumText, SmallText, BidForm, PageModal, Tablist, BidHistory } from "../../index.ts";
+    import { Heading, SecondaryText, Subheading, PrimaryButton, FullScreenGallery, Gallery, MobileGallery, Path, Subtitle, MediumText, SmallText, BidForm, PageModal, Tablist, BidHistory } from "../../index.ts";
 
     let loaded: boolean = false;
     let auctionListing: AuctionListing = defaultAuctionListing;
@@ -14,18 +13,15 @@
     let currentBid: Bid = defaultBid;
     let bidHistory: Bid[] = [];
 
-    let activeTab = 0;
-
     const { categoryId, subCategoryId } = $page.params;
 
     export let auctionListingId: string;
 
-    $: currentBid.formatted_amount = formatCurrency(currentBid.amount);
+    $: currentBid.formatted_amount = formatCurrency(currentBid.amount) 
     
     onMount(async () => {
-        connectToHub(await useSignalRHub<number>("https://localhost:32768/auction-hub", "NewBid", (data) => currentBid.amount = data));
+        connectToHub(await useSignalRHub<Bid>("https://localhost:32768/auction-hub", "NewBid", (data) => { currentBid = data; bidHistory = [...bidHistory, currentBid]; }));
         invokeHubMethod("JoinGroup", `auction_${auctionListingId}`)
-        console.log(currentBid);
         const [auctionResponse, imagesResponse, bidResponse, bidHistoryResponse] = await fetchMultipleRequests(
             [
                 { url: `/api/AuctionListing/${auctionListingId}`, method: "GET" },
@@ -85,7 +81,7 @@
                 <Heading active={loaded}>&euro; {currentBid.formatted_amount}</Heading>
             </div>
             <div class="form">
-                <BidForm active={loaded} currentBid={currentBid}></BidForm>
+                <BidForm active={loaded} currentBid={currentBid} auctionListingId={Number(auctionListingId)}></BidForm>
             </div>
         </div>
     </div>
@@ -115,7 +111,7 @@
         <PrimaryButton active={loaded} --primary="white" --secondary="black" onClick={() => isPageModalOpen.set(true)}>Place Bid</PrimaryButton>
     </div>
     {#if $isPageModalOpen}
-        <PageModal currentBid={currentBid} bidHistory={bidHistory} thumbnailImage={auctionListingImages[0]}></PageModal>
+        <PageModal auctionListingId={Number(auctionListingId)} currentBid={currentBid} bidHistory={bidHistory} thumbnailImage={auctionListingImages[0]}></PageModal>
     {/if}
 </section>
 
