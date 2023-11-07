@@ -4,6 +4,7 @@
     import { isPageModalOpen, fullscreenGallery, activeIndex } from "../../../stores/index.ts";
 	import { Heading, MediumText, SecondaryText, BidForm, BidHistory } from "../../index.ts";
 
+    export let auctionListingId: number;
     export let currentBid: Bid = defaultBid;
     export let bidHistory: Bid[] = []
     export let thumbnailImage: Image;
@@ -31,7 +32,7 @@
                     <SecondaryText>Current bid</SecondaryText>
                     <Heading>&euro; {currentBid.formatted_amount}</Heading>
                 </div>
-                <BidForm --form-width="100%" --button-gap="10px" currentBid={currentBid}></BidForm>
+                <BidForm --form-width="100%" --button-gap="10px" auctionListingId={Number(auctionListingId)} currentBid={currentBid}></BidForm>
             </div>
             <BidHistory bids={bidHistory}></BidHistory>
         </div>
