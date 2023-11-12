@@ -1,11 +1,12 @@
+import { API_URL } from "..";
+
 export async function sendRequest<T>(
     url: string, 
     method: string, 
     data: T | null = null
 ): Promise<T> {
-
-    const apiUrl = 'https://localhost:32768';
-    url = `${apiUrl}${url}`;
+    
+    url = `${API_URL}${url}`;
 
     const options = {
         method,
@@ -25,6 +26,6 @@ export async function sendRequest<T>(
         const responseData = await response.json();
         return responseData as T;
     } catch (error) {
-        throw new Error(`Request error: ${(error as Error).message}`);
+        throw new Error(`Request error: ${(error as Error).message}, ${(error as Error).cause}`);
     }
 }
