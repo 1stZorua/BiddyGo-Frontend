@@ -1,26 +1,26 @@
 <script lang=ts>
     import { page } from "$app/stores";
 	import { onDestroy, onMount } from "svelte";
-    import { fetchMultipleRequests, useSignalRHub, formatCurrency } from "$lib/functions/index.ts";
-	import type { AuctionListing, Bid, Image } from "$lib/types/types.ts";
-	import { defaultAuctionListing, defaultBid } from "$lib/types/defaults.ts";
+    import { API_URL, fetchMultipleRequests, useSignalRHub, formatCurrency, calculateRemainingTime, formatRemainingTime } from "$lib/functions/index.ts";
+	import type { AuctionListing, Bid, Image, RemainingTime } from "$lib/types/types.ts";
+	import { defaultAuctionListing, defaultBid, defaultRemainingTime } from "$lib/types/defaults.ts";
     import { fullscreenGallery, connectToHub, disconnectFromHub, isPageModalOpen, invokeHubMethod } from "../../../stores/index.ts"
     import { Heading, SecondaryText, Subheading, PrimaryButton, FullScreenGallery, Gallery, MobileGallery, Path, Subtitle, MediumText, SmallText, BidForm, PageModal, Tablist, BidHistory } from "../../index.ts";
 
     let loaded: boolean = false;
+    let interval: NodeJS.Timeout;
     let auctionListing: AuctionListing = defaultAuctionListing;
     let auctionListingImages: Image[] = [];
     let currentBid: Bid = defaultBid;
     let bidHistory: Bid[] = [];
+    let remainingTime: RemainingTime = defaultRemainingTime;
 
-    const { categoryId, subCategoryId } = $page.params;
-
-    export let auctionListingId: string;
+    const { auctionListingId, categoryId, subCategoryId } = $page.params;
 
     $: currentBid.formatted_amount = formatCurrency(currentBid.amount) 
     
     onMount(async () => {
-        connectToHub(await useSignalRHub<Bid>("https://localhost:32768/auction-hub", "NewBid", (data) => { currentBid = data; bidHistory = [...bidHistory, currentBid]; }));
+        connectToHub(await useSignalRHub<Bid>(`${API_URL}/auction-hub`, "NewBid", (data) => { currentBid = data; bidHistory = [...bidHistory, currentBid]; }));
         invokeHubMethod("JoinGroup", `auction_${auctionListingId}`)
         const [auctionResponse, imagesResponse, bidResponse, bidHistoryResponse] = await fetchMultipleRequests(
             [
@@ -30,12 +30,19 @@
                 { url: `/api/Bid/${auctionListingId}`, method: "GET" }
             ]
         );
+        
+        [auctionListing, auctionListingImages, currentBid, bidHistory] = [auctionResponse as AuctionListing, imagesResponse as Image[], bidResponse as Bid, bidHistoryResponse as Bid[]]  
 
-        [auctionListing, auctionListingImages, currentBid, bidHistory] = [auctionResponse as AuctionListing, imagesResponse as Image[], bidResponse as Bid, bidHistoryResponse as Bid[]]
+        remainingTime = calculateRemainingTime(new Date(auctionListing.endTime.toString()).getTime()) 
+        interval = setInterval(() => { 
+            remainingTime = calculateRemainingTime(new Date(auctionListing.endTime.toString()).getTime()) 
+        }, 1000);
+        
         loaded = true;
     });
 
     onDestroy(() => {
+        clearInterval(interval);
         disconnectFromHub();
     })
 </script>
@@ -68,10 +75,10 @@
             </div>
             <div data-active={loaded} class="time-remaining">
                 {#if loaded}
-                    {#each Array(["1", "Days"], ["9", "Hours"], ["24", "Minutes"], ["17", "Seconds"],) as time}
+                    {#each Object.entries(remainingTime) as [key, value]}
                         <div>
-                            <MediumText --color="#7A7A7A" --font-weight="700">{time[0]}</MediumText>
-                            <SmallText --font-weight="600">{time[1]}</SmallText>
+                            <MediumText --color="#7A7A7A" --font-weight="700">{value}</MediumText>
+                            <SmallText --font-weight="600">{key}</SmallText>
                         </div>
                     {/each}
                 {/if}
@@ -81,7 +88,7 @@
                 <Heading active={loaded}>&euro; {currentBid.formatted_amount}</Heading>
             </div>
             <div class="form">
-                <BidForm active={loaded} currentBid={currentBid} auctionListingId={Number(auctionListingId)}></BidForm>
+                <BidForm active={loaded} {currentBid} auctionListingId={Number(auctionListingId)}></BidForm>
             </div>
         </div>
     </div>
@@ -106,12 +113,12 @@
         <div>
             <SecondaryText active={loaded}>Current Bid</SecondaryText>
             <Heading active={loaded}>&euro; {currentBid.formatted_amount}</Heading>
-            <SmallText active={loaded}>1d 9u 24m 17s</SmallText>
+            <SmallText active={loaded}>{formatRemainingTime(remainingTime)}</SmallText>
         </div>
-        <PrimaryButton active={loaded} --primary="white" --secondary="black" onClick={() => isPageModalOpen.set(true)}>Place Bid</PrimaryButton>
+        <PrimaryButton active={loaded} --color="white" --background-color="black" onClick={() => isPageModalOpen.set(true)}>Place Bid</PrimaryButton>
     </div>
     {#if $isPageModalOpen}
-        <PageModal auctionListingId={Number(auctionListingId)} currentBid={currentBid} bidHistory={bidHistory} thumbnailImage={auctionListingImages[0]}></PageModal>
+        <PageModal {auctionListing} {currentBid} {remainingTime} {bidHistory} thumbnailImage={auctionListingImages[0]}></PageModal>
     {/if}
 </section>
 
