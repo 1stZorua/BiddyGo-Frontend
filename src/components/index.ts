@@ -10,6 +10,8 @@ export { default as Listing } from "./Layout/Listing/Card.svelte";
 export { default as BidHistory } from "./Layout/Listing/History.svelte";
 export { default as ListingSlider } from "./Layout/Listing/Slider.svelte";
 export { default as ViewListing } from "./Layout/Listing/View.svelte";
+export { default as LoginForm } from "./Layout/Login/Login.svelte";
+export { default as RegisterForm } from "./Layout/Login/Register.svelte";
 export { default as MobileApp } from "./Layout/Mobile App/MobileApp.svelte";
 export { default as Recommendations } from "./Layout/Recommendations/Recommendations.svelte";
 export { default as Slogan } from "./Layout/Slogan/Slogan.svelte";
