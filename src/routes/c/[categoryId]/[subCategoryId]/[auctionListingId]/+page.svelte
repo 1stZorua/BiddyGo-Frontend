@@ -1,8 +1,11 @@
 <script lang=ts>
-    import { page } from "$app/stores";
-    import { ViewListing, PageModal } from "../../../../../components/index.ts";
+    import { ViewListing } from "../../../../../components/index.ts";
+	import { setContext } from "svelte";
+	import type { PageData } from "./$types";
 
-    const auctionListingId: string = $page.params.auctionListingId;
+    export let data: PageData
+
+    $: setContext("bidData", data.form);
 </script>
 
-<ViewListing auctionListingId={auctionListingId}></ViewListing>
+<ViewListing></ViewListing>
