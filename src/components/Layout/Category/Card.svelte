@@ -5,15 +5,15 @@
 	import { defaultSubCategory } from "$lib/types/defaults.ts";
     import { SecondaryText } from "../../index.ts";
     
-    let color = '#FBB763';
-    let loaded: boolean = false;
-
     export let active: boolean = true;
     export let subCategoryData: {
         imageId: number,
         image?: Image | null,
         name: string
     } = defaultSubCategory;
+    
+    let color = '#FBB763';
+    let loaded: boolean = false;
     
     onMount(async () => {
         if (!active) return;
