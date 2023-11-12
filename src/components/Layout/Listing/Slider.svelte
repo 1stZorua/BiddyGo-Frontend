@@ -6,11 +6,11 @@
     import { Subheading, TertiaryButton, Slider } from "../../index.ts";
 	import Card from "./Card.svelte";
 
-    let auctionListings : Array<AuctionListing> = []
-    let loaded: boolean = false;
-
     export let active: boolean = true;
     export let subCategory : SubCategory = defaultSubCategory;
+
+    let auctionListings : Array<AuctionListing> = []
+    let loaded: boolean = false;
 
     onMount(async() => {
         if (!active) return;
