@@ -3,13 +3,13 @@
 	import type { Image } from "$lib/types/types.ts";
     import { Slider } from "../../index.ts";
 
+    export let active: boolean = true;
+    export let images: Array<Image> = [];
+
     function openFullScreenGallery(index: number) {
         activeIndex.set(index);
         fullscreenGallery.set(true)
     }
-
-    export let active: boolean = true;
-    export let images: Array<Image> = [];
 </script>
 
 <div class="mobile-image-container">
