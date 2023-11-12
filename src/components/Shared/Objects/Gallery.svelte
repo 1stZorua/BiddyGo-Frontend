@@ -3,6 +3,9 @@
 	import type { Image } from "$lib/types/types.ts";
     import { ZoomImage } from "../../index.ts";
 
+    export let active: boolean = true;
+    export let images: Array<Image> = [];
+
     let activeImageIndex: number = 0;
     let previousActiveIndex: number = 0;
 
@@ -23,9 +26,6 @@
         activeIndex.set(activeImageIndex);
         fullscreenGallery.set(true)
     }
-
-    export let active: boolean = true;
-    export let images: Array<Image> = [];
 </script>
 
 {#if active}
