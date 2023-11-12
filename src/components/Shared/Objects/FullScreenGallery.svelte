@@ -4,6 +4,8 @@
     import { fullscreenGallery, activeIndex } from "../../../stores/index.ts"
     import { SecondaryText, Slider, SliderArrow } from "../../index.ts";
 
+    export let images: Array<Image> = [];
+
     let sliderContainer: HTMLDivElement;
     let slider: HTMLElement;
     let currentIndex = $activeIndex;
@@ -28,8 +30,6 @@
     function onSliderScroll() {
         currentIndex = Math.round(slider.scrollLeft / (slider.scrollWidth / images.length));
     }
-
-    export let images: Array<Image> = [];
 
     onMount(() => {
         slider = sliderContainer.querySelector('.container')!;
@@ -64,7 +64,7 @@
             class="slider-container"
             bind:this={sliderContainer}
         >
-            <Slider --gap="0" --padding-right="0">
+            <Slider --slider-gap="0" --slider-padding-right="0">
                 {#each images as image}
                     <div>
                         <img src={"data:image/jpeg;base64," + image?.fileContents} alt="placeholder">
