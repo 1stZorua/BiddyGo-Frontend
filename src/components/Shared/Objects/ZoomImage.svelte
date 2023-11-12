@@ -1,7 +1,10 @@
 <script lang=ts>
+    export let src: string;
+
     let image: HTMLImageElement;
     let zoomContainer: HTMLDivElement;
     let zoomImage: HTMLDivElement;
+    let zoom: number = 0.25;
 
     function onZoomContainerMouseMove(e: MouseEvent) {
         let x = e.clientX - zoomContainer.getBoundingClientRect().left;
@@ -19,9 +22,6 @@
         zoomImage.style.left = x - (zoomImage.offsetWidth * zoom / (zoom * 2)) + "px";
         zoomImage.style.top = y - (zoomImage.offsetHeight * zoom / (zoom * 2)) + "px";
     }
-
-    let zoom: number = 0.25;
-    export let src: string;
 </script>
 
 <div 
