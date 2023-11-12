@@ -11,12 +11,12 @@
 </script>
 
 <div class="container">
-    <button class:toggled={toggled} on:click={onMenuToggle}>
+    <button class:is-active={toggled} on:click={onMenuToggle}>
         <span></span>
         <span></span>
         <span></span>
     </button>
-    <div class="menu" class:toggled={toggled}>
+    <div class="menu" class:is-active={toggled}>
         <ul>
             {#each headerLinks as link (link)}
                 <li><a href={link.href}>{link.name}</a></li>
@@ -69,7 +69,7 @@
         }
     }
 
-    button.toggled {
+    button.is-active {
         span {
             background: $secondary;
 
@@ -170,7 +170,7 @@
         }
     }
     
-    .menu.toggled {
+    .menu.is-active {
         translate: 0;
     }
 
