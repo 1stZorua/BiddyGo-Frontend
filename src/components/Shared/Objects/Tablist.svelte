@@ -2,6 +2,9 @@
     import { onMount } from "svelte";
     import { FilterButton } from "../../index.ts";
 
+    export let active: boolean = true;
+    export let sections: string[] = [];
+
     let activeButton: number = 0;
     let tablistContent: HTMLDivElement;
     let content: Array<HTMLDivElement>;
@@ -18,9 +21,6 @@
             c.classList.add("hidden");
         });
     }
-
-    export let active: boolean = true;
-    export let sections: string[] = [];
 
     onMount(() => {
         content = Array.from(tablistContent.querySelectorAll(".content > div"));
