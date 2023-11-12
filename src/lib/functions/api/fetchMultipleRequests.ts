@@ -1,7 +1,7 @@
 import { sendRequest } from "../index.ts"
 
 export async function fetchMultipleRequests(
-    requests: Array<{ url: string, method: string, data?: object }>, 
+    requests: Array<{ url: string; method: string; data?: object }>, 
 ) {
 
     const requestPromises = requests.map(r => {
