@@ -1,13 +1,14 @@
 <script lang=ts>
-    import type { Bid, Image } from "$lib/types/types.ts";
-	import { defaultBid } from "$lib/types/defaults.ts";
+    import type { AuctionListing, Bid, Image, RemainingTime } from "$lib/types/types.ts";
+    import { formatRemainingTime } from "$lib/functions/index.ts";
     import { isPageModalOpen, fullscreenGallery, activeIndex } from "../../../stores/index.ts";
 	import { Heading, MediumText, SecondaryText, BidForm, BidHistory } from "../../index.ts";
 
-    export let auctionListingId: number;
-    export let currentBid: Bid = defaultBid;
-    export let bidHistory: Bid[] = []
+    export let auctionListing: AuctionListing;
+    export let currentBid: Bid;
+    export let bidHistory: Bid[];
     export let thumbnailImage: Image;
+    export let remainingTime: RemainingTime;
 
     function openFullScreenGallery(index: number) {
         activeIndex.set(index);
@@ -20,7 +21,7 @@
 >
     <div class="header">
         <button on:click={() => isPageModalOpen.set(false)}><i class="fa-solid fa-chevron-left"></i></button>
-        <MediumText><b>Closes in</b> 7h 47m 20s</MediumText>
+        <MediumText><b>Closes in</b> {formatRemainingTime(remainingTime)}</MediumText>
     </div>
     <div class="wrapper">
         <div class="listing">
@@ -32,10 +33,10 @@
                     <SecondaryText>Current bid</SecondaryText>
                     <Heading>&euro; {currentBid.formatted_amount}</Heading>
                 </div>
-                <BidForm --form-width="100%" --button-gap="10px" auctionListingId={Number(auctionListingId)} currentBid={currentBid}></BidForm>
+                <BidForm --form-width="100%" --button-gap="10px" auctionListingId={auctionListing.id} {currentBid} pageModal={true}></BidForm>
             </div>
-            <BidHistory bids={bidHistory}></BidHistory>
         </div>
+        <BidHistory bids={bidHistory}></BidHistory>
     </div>
 </div>
 
@@ -82,16 +83,20 @@
     }
 
     .wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
         margin-top: 110px;
         padding: $wrapper-margin-inline-normal;
     }
 
     .listing {
         display: flex;
-        justify-content: center;
         gap: 30px;
 
         button {
+            width: 550px;
+            height: 400px;
             background: none;
             border: none;
 
@@ -102,8 +107,7 @@
 
         img {
             width: 100%;
-            max-width: 750px;
-            max-height: 450px;
+            height: 100%;
             object-fit: cover;
         }
     }
@@ -112,7 +116,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        gap: 30px;
+        gap: 50px;
     }
 
     @media (max-width: $screen-wide) {
@@ -125,8 +129,9 @@
         .listing {
             flex-direction: column;
 
-            img {
-                max-width: 100%;
+            button {
+                width: 100%;
+                max-height: 450px;
             }
         } 
     }
@@ -139,6 +144,12 @@
         .wrapper {
             margin-top: 80px;
             padding-inline: $wrapper-margin-inline-small;
+        }
+    }
+
+    @media (max-width: $screen-small) {
+        .listing button {
+            max-height: 250px;
         }
     }
 </style>
