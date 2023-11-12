@@ -1,18 +1,17 @@
 <script lang=ts>
-    import { fly } from "svelte/transition";
-    import { backOut } from "svelte/easing";
+    import { slide } from "svelte/transition";
     import type { Bid } from "$lib/types/types.ts";
     import { formatCurrency } from "$lib/functions";
     import { MediumText, SmallText, Subheading } from "../../index.ts";
     import flag_netherlands from "$lib/img/flag_netherlands.svg";
+    
+    export let bids : Bid[];
 
     let seeAllBids: boolean = false;
 
     function onSeeAllBidsClick() {
         seeAllBids = !seeAllBids;
     }
-
-    export let bids : Bid[];
 </script>
 
 <section>
@@ -38,12 +37,17 @@
         </tbody>
         <button on:click={onSeeAllBidsClick}>
             <MediumText>See all bids ({bids.length > 3 ? bids.length : 0})</MediumText>
-            <i class="fa-solid fa-chevron-down"></i>
+            <i 
+                class="fa-solid"
+                class:fa-chevron-down={!seeAllBids}
+                class:fa-chevron-up={seeAllBids}
+            >
+            </i>
         </button>
         {#if seeAllBids}
             <tbody 
                 class="other__bids" 
-                transition:fly={{ y: -50, easing: backOut }}      
+                transition:slide|local     
             >
                 {#each [...bids].reverse().slice(3, bids.length) as bid, index}
                     <tr>
@@ -94,23 +98,23 @@
     tr {
         display: flex;
         align-items: center;
-        
-        td {
-            vertical-align: middle;
-            white-space: nowrap;
+    }
 
-            &:first-child {
-                width: 35%;
-            }
+    td {
+        vertical-align: middle;
+        white-space: nowrap;
 
-            &:nth-child(2) {
-                text-align: left;
-                width: 35%;
-            }
+        &:first-child {
+            width: 35%;
+        }
 
-            &:last-child {
-                margin-left: auto;
-            }
+        &:nth-child(2) {
+            text-align: left;
+            width: 35%;
+        }
+
+        &:last-child {
+            margin-left: auto;
         }
     }
 
