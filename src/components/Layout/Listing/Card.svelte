@@ -1,15 +1,16 @@
 <script lang=ts>
     import { onMount } from "svelte";
-    import { fetchMultipleRequests, formatCurrency, truncateText } from "$lib/functions/index.ts";
-    import type { AuctionListing, Bid, Image } from "$lib/types/types";
-	import { defaultAuctionListing } from "$lib/types/defaults.ts";
+    import { calculateRemainingTime, fetchMultipleRequests, formatCurrency, formatRemainingTime, truncateText } from "$lib/functions/index.ts";
+    import type { AuctionListing, Bid, Image, RemainingTime } from "$lib/types/types";
+	import { defaultAuctionListing, defaultRemainingTime } from "$lib/types/defaults.ts";
     import { SecondaryText, SmallText, MediumText } from "../../index.ts";
-
-    let thumbnailImage: Image;
-    let currentBid: Bid;
 
     export let active: boolean = true;
     export let auctionListing: AuctionListing = defaultAuctionListing;
+
+    let thumbnailImage: Image;
+    let currentBid: Bid;
+    let remainingTime: RemainingTime = defaultRemainingTime;
 
     onMount(async() => {
         if (!active) return;
@@ -20,10 +21,12 @@
             ]
         );
         [currentBid, thumbnailImage] = [bidResponse as Bid, thumbnailResponse as Image];
+
+        remainingTime = calculateRemainingTime(new Date(auctionListing.endTime.toString()).getTime())
     });
 </script>
 
-<a rel="external" href={active ? [window.location.href, auctionListing.subCategoryId, auctionListing.id].join("/") : ""} class="card" draggable="false">
+<a rel="external" href={active ? [window.location.href, auctionListing.subCategoryId, auctionListing.id].join("/") : ""} class="card" draggable="false" data-sveltekit-preload-data>
     <div class="display">
         {#if thumbnailImage}
             <img src={"data:image/jpeg;base64," + thumbnailImage?.fileContents} alt={auctionListing.title} draggable="false" loading="lazy">
@@ -37,7 +40,7 @@
             <SecondaryText active={active} --color="#7A7A7A">Current Bid</SecondaryText>
             <MediumText active={currentBid ? true : false}>&euro; {currentBid ? formatCurrency(currentBid.amount) : 0}</MediumText>
         </div>
-        <SecondaryText active={active} --color="#7A7A7A" --font-family="Poppins" --font-weight="500" --text-transform="normal">{auctionListing.startTime} left</SecondaryText>
+        <SecondaryText active={active} --color="#7A7A7A" --font-family="Poppins" --font-weight="500" --text-transform="normal">{formatRemainingTime(remainingTime, "other")} left</SecondaryText>
     </div>
 </a>
 
