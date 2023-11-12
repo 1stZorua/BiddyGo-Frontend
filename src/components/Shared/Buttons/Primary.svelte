@@ -14,12 +14,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        color: var(--primary);
+        color: var(--color, $primary);
         overflow: hidden;
         position: relative;
         z-index: 0;
         width: var(--width, max-content);
-        background: var(--secondary);
+        background: var(--background-color, $secondary);
         border: $btn-primary-border;
         border-radius: $btn-border-radius-rounded;
         padding-inline: $btn-padding-inline;
@@ -31,7 +31,7 @@
             content: '';
             position: absolute;
             z-index: -2;
-            background: var(--primary);
+            background: var(--color, $primary);
             width: 100%;
             height: 100%;
             padding: 20px;
