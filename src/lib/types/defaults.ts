@@ -1,4 +1,4 @@
-import type { AuctionListing, Bid, Category, SubCategory, User } from "./types";
+import type { AuctionListing, Bid, Category, RemainingTime, SubCategory, User } from "./types";
 
 export const defaultAuctionListing: AuctionListing = {
     id: 0,
@@ -10,6 +10,13 @@ export const defaultAuctionListing: AuctionListing = {
     startTime: new Date('2023-07-11T00:00:00'),
     endTime: new Date('2023-07-11T00:00:00'),
     sellerId: 0
+};
+
+export const defaultRemainingTime : RemainingTime = {
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
 };
 
 export const defaultBid: Bid = {
