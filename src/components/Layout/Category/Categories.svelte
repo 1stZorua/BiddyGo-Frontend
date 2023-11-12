@@ -5,11 +5,11 @@
     import { Heading, Path } from "../../index.ts";
     import Card from "./Card.svelte";
 
+    export let categoryId: string;
+
     let category: Category;
     let subcategories: SubCategory[] = []
     let loaded: boolean = false;
-
-    export let categoryId: string;
 
     onMount(async () => {
         const [categoryResponse, subcategoriesResponse] = await fetchMultipleRequests(
