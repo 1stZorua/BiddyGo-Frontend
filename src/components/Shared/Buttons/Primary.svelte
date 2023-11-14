@@ -71,4 +71,10 @@
             width: var(--small-width, max-content);
         }
     }
+
+    @media (max-width: $screen-small) { 
+        button {
+            width: var(--mobile-width, var(--small-width, max-content));
+        }
+    }
 </style>
