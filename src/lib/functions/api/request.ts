@@ -1,30 +1,38 @@
-import { API_URL } from "..";
+import { API_URL } from "../index.ts";
 
-export async function sendRequest<T>(
+export async function sendRequest<Return>(
     url: string, 
     method: string, 
     data: T | null = null
-): Promise<T> {
+): Promise<Return> {
     
     url = `${API_URL}${url}`;
 
     const options = {
         method,
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json"
         },
         body: data ? JSON.stringify(data) : null,
     };
+
+    if (typeof window === "undefined") {
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    }
   
     try {
         const response = await fetch(url, options);
-  
+
         if (!response.ok) {
-            throw new Error(`Request failed with status ${response.status}`);
+            if (response.statusText === "Not Found") {
+                throw new Error("Not Found");
+            }
+
+            throw new Error(`Request failed with status ${response.status}, ${response.statusText}`);
         }
   
         const responseData = await response.json();
-        return responseData as T;
+        return responseData as Return;
     } catch (error) {
         throw new Error(`Request error: ${(error as Error).message}, ${(error as Error).cause}`);
     }
