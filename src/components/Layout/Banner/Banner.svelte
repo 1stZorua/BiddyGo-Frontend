@@ -10,7 +10,7 @@
             <h1>A world of auctions awaits, <b>Dive in!</b></h1>
             <p>Bid confidently on our platform where every auction holds hidden treasures waiting for you to discover.</p>
             <div class="cta">
-                <PrimaryButton --color="white" --background-color="black">Start Bidding</PrimaryButton>
+                <PrimaryButton --color="white" --background-color="black" --mobile-width="100%">Start Bidding</PrimaryButton>
                 <SecondaryButton text={"Become a Seller"}>
                     <i class="fa-solid fa-dollar-sign"></i>
                 </SecondaryButton>
