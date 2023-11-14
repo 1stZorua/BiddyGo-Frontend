@@ -1,26 +1,27 @@
 <script lang=ts>
-    import { page } from "$app/stores";
-	import { onMount } from "svelte";
-    import { sendRequest } from "$lib/functions/index.ts";
-	import type { SubCategory } from "$lib/types/types";
+	import type { SubCategory, AuctionListing, Category } from "$lib/types/types";
     import { Categories, ListingSlider } from "../../../components/index.ts";
+	import { afterNavigate } from "$app/navigation";
 
-    const categoryId: string = $page.params.categoryId;
+    export let data: {
+        category: Category,
+        subCategories: SubCategory[]
+        auctionListings: AuctionListing[][]
+    };
 
-    let subCategories: Array<SubCategory> = [];
     let loaded: boolean = false;
-    
-    onMount(async() => {
-        subCategories = await sendRequest(`/api/Category/subcategories/${categoryId}`, "GET");
-        loaded = true;
-    });
-    
+
+    afterNavigate(() => loaded = true); 
 </script>
 
-<Categories categoryId={categoryId}></Categories>
+<Categories 
+    active={loaded}
+    category={data.category}
+    subCategories={data.subCategories}
+></Categories>
 {#if loaded}
-    {#each subCategories as subCategory}
-        <ListingSlider subCategory={subCategory}></ListingSlider>
+    {#each data.subCategories as subCategory, index}
+        <ListingSlider {subCategory} auctionListings={data.auctionListings[index]}></ListingSlider>
     {/each}
 {:else}
     {#each Array(3) as _}
