@@ -3,12 +3,15 @@
     import { formatRemainingTime } from "$lib/functions/index.ts";
     import { isPageModalOpen, fullscreenGallery, activeIndex } from "../../../stores/index.ts";
 	import { Heading, MediumText, SecondaryText, BidForm, BidHistory } from "../../index.ts";
+    import type { SuperValidated } from "sveltekit-superforms";
+    import type { BidSchema } from "$lib/schemas/bid.ts";
 
     export let auctionListing: AuctionListing;
     export let currentBid: Bid;
     export let bidHistory: Bid[];
     export let thumbnailImage: Image;
     export let remainingTime: RemainingTime;
+    export let formData: SuperValidated<BidSchema>;
 
     function openFullScreenGallery(index: number) {
         activeIndex.set(index);
@@ -33,7 +36,7 @@
                     <SecondaryText>Current bid</SecondaryText>
                     <Heading>&euro; {currentBid.formatted_amount}</Heading>
                 </div>
-                <BidForm --form-width="100%" --button-gap="10px" auctionListingId={auctionListing.id} {currentBid} pageModal={true}></BidForm>
+                <BidForm --form-width="100%" --button-gap="10px" auctionListingId={auctionListing.id} {currentBid} {formData} pageModal={true}></BidForm>
             </div>
         </div>
         <BidHistory bids={bidHistory}></BidHistory>
