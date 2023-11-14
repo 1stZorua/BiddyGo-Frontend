@@ -1,5 +1,5 @@
 // api
-export const API_URL = 'https://localhost:32774';
+export const API_URL = 'https://localhost:32770';
 
 export * from './api/fetchMultipleRequests.ts';
 export * from './api/request.ts';
