@@ -1,9 +1,21 @@
+import type { SuperValidated } from "sveltekit-superforms";
+import type { BidSchema } from "$lib/schemas/bid.ts";
+
 export interface RemainingTime {
     days: number,
     hours: number,
     minutes: number,
     seconds: number
 }
+
+export type ViewData = {
+    formData: SuperValidated<BidSchema>, 
+    auctionListing: AuctionListing,
+    auctionListingImages: Image[],
+    currentBid: Bid,
+    bidHistory: Bid[],
+    remainingTime: RemainingTime
+};
 
 export interface AuctionListing {
     id: number,
@@ -14,7 +26,8 @@ export interface AuctionListing {
     reservePrice: number,
     startTime: Date,
     endTime: Date,
-    sellerId: number
+    sellerId: number,
+    remainingTime: RemainingTime
 }
 
 export interface Bid { 
@@ -44,6 +57,7 @@ export interface SubCategory {
 }
 
 export interface User {
-    id: number,
-    email: string
+    id?: number,
+    email: string,
+    password: string
 }
