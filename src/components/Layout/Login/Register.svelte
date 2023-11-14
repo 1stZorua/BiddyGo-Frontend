@@ -2,52 +2,59 @@
     import { superForm } from "sveltekit-superforms/client";
     import type { SuperValidated } from "sveltekit-superforms";
 	import type { RegisterSchema } from "$lib/schemas/register.ts";
-    import { Heading, Input, PrimaryButton } from "../../index.ts";
+    import { Heading, Input, PrimaryButton, SmallText } from "../../index.ts";
 
-    export let data: SuperValidated<RegisterSchema>
+    export let data: SuperValidated<RegisterSchema>;
+    export let onClick: () => void;
+    export let shown: boolean;
 
     const { form, errors, enhance, constraints } = superForm(data);
 </script>
 
-<form action="?/register" method="post" use:enhance>
-    <div>
-        <Heading>Register</Heading>
-    </div>
-    <div>
-        <Input 
-            label={"Email"}
-            type="email" 
-            name="email"
-            error={$errors.email}
-            required
-            {...$constraints.email}
-            bind:value={$form.email}
-        ></Input>
-    </div>
-    <div>
-        <Input 
-            label={"Password"}
-            type="password" 
-            name="password"
-            error={$errors.password}
-            required
-            {...$constraints.password}
-            bind:value={$form.password}
-        ></Input>
-    </div>
-    <div>
-        <Input 
-            label={"Confirm Password"}
-            type="password" 
-            name="confirmPassword"
-            error={$errors.confirmPassword}
-            required
-            {...$constraints.confirmPassword}
-            bind:value={$form.confirmPassword}
-        ></Input>
-    </div>
-    <PrimaryButton --width="100%" --small-width="100%">Create account</PrimaryButton>
-</form>
+{#if shown}
+    <form action="?/register" method="post" use:enhance>
+        <div>
+            <Heading>Register</Heading>
+            <button type="button" on:click={onClick}>
+                <SmallText --color="#159895">Sign in</SmallText>
+            </button>
+        </div>
+        <div>
+            <Input 
+                label={"Email"}
+                type="email" 
+                name="email"
+                error={$errors.email}
+                required
+                {...$constraints.email}
+                bind:value={$form.email}
+            ></Input>
+        </div>
+        <div>
+            <Input 
+                label={"Password"}
+                type="password" 
+                name="password"
+                error={$errors.password}
+                required
+                {...$constraints.password}
+                bind:value={$form.password}
+            ></Input>
+        </div>
+        <div>
+            <Input 
+                label={"Confirm Password"}
+                type="password" 
+                name="confirmPassword"
+                error={$errors.confirmPassword}
+                required
+                {...$constraints.confirmPassword}
+                bind:value={$form.confirmPassword}
+            ></Input>
+        </div>
+        <PrimaryButton --width="100%" --small-width="100%">Create account</PrimaryButton>
+    </form>
+{/if}
 
 <style lang=scss>
     form {
@@ -62,6 +69,25 @@
         display: flex;
         flex-direction: column;
         gap: 50px;
+    }
+
+    form > div:first-child {
+        display: flex;
+        justify-content: space-between;
+
+        button {
+            background: none;
+            border: none;
+            text-decoration: underline;
+            text-decoration-color: $btn-secondary;
+            transition:
+                text-decoration-color $transition-fast;
+            
+            &:hover {
+                cursor: pointer;
+                text-decoration-color: $btn-tertiary;
+            }
+        }
     }
 
     @media (max-width: $screen-medium) {
