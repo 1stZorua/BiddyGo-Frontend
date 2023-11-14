@@ -38,10 +38,10 @@
 
     @media(max-width: $screen-wide) {
         span {
-            color: var(--screen-wide-color, $primary);
+            color: var(--screen-wide-color, var(--line-color, $primary));
 
             &::before {
-                background: var(--screen-wide-color, $primary);
+                background: var(--screen-wide-color, var(--line-color, $primary));
             }
         }
     }
