@@ -1,54 +1,34 @@
 <script lang=ts>
-    import { onMount } from "svelte";
-    import { fetchMultipleRequests } from "$lib/functions/index.ts";
     import type { Category, SubCategory } from "$lib/types/types.ts";
     import { Heading, Path } from "../../index.ts";
     import Card from "./Card.svelte";
 
-    export let categoryId: string;
-
-    let category: Category;
-    let subcategories: SubCategory[] = []
-    let loaded: boolean = false;
-
-    onMount(async () => {
-        const [categoryResponse, subcategoriesResponse] = await fetchMultipleRequests(
-            [
-                { url: `/api/Category/${categoryId}`, method: "GET" },
-                { url: `/api/Category/subcategories/${categoryId}`, method: "GET" }
-            ]
-        );
-        [category, subcategories] = [categoryResponse as Category, subcategoriesResponse as SubCategory[]];
-        loaded = true;
-    });
+    export let active: boolean;
+    export let category: Category;
+    export let subCategories: SubCategory[];
 </script>
 
-{#if loaded}
+{#if active}
     <section class="categories">
         <div class="text">
             <Path categories={[category.name]}></Path>
             <Heading>{category.name}</Heading>
         </div>
         <div class="container">
-            {#each subcategories as subcategory}
-                <Card subCategoryData={
-                    {
-                        imageId: subcategory.imageId, 
-                        name: subcategory.name
-                    }
-                }></Card>
+            {#each subCategories as subCategory}
+                <Card subCategory={subCategory}></Card>
             {/each}
         </div>
     </section>
 {:else}
     <section class="categories">
         <div class="text">
-            <Path active={loaded} categories={["BiddyGo > Entertainment, Cards & Games"]}></Path>
-            <Heading active={loaded}>Entertainment, Cards & Games</Heading>
+            <Path active={active} categories={["BiddyGo > Entertainment, Cards & Games"]}></Path>
+            <Heading active={active}>Entertainment, Cards & Games</Heading>
         </div>
         <div class="container">
             {#each Array(3) as _}
-                <Card active={loaded}></Card>
+                <Card active={active}></Card>
             {/each}
         </div>
     </section>
