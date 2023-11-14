@@ -1,42 +1,39 @@
 <script lang=ts>
 	import { onMount } from "svelte";
     import { sendRequest, scrollTo } from "$lib/functions/index.ts";
-    import type { Image } from "$lib/types/types";
+    import type { Image, SubCategory } from "$lib/types/types";
 	import { defaultSubCategory } from "$lib/types/defaults.ts";
     import { SecondaryText } from "../../index.ts";
     
     export let active: boolean = true;
-    export let subCategoryData: {
-        imageId: number,
-        image?: Image | null,
-        name: string
-    } = defaultSubCategory;
+    export let subCategory: SubCategory = defaultSubCategory;
     
-    let color = '#FBB763';
     let loaded: boolean = false;
+    let color = '#FBB763';
+    let image: Image;
     
     onMount(async () => {
         if (!active) return;
-        subCategoryData.image = await sendRequest(`/api/Image/${subCategoryData.imageId}`, "GET");
+        image = await sendRequest(`/api/Image/${subCategory.imageId}`, "GET");
         loaded = true;
     });
 </script>
 
 <a 
-    href="#{subCategoryData.name}" 
+    href="#{subCategory.name}" 
     class="card" 
     style="--color: {color};"
     data-active={loaded}
-    on:click={(e) => { e.preventDefault(); scrollTo(subCategoryData.name, true) }}
+    on:click={(e) => { e.preventDefault(); scrollTo(subCategory.name, true) }}
 >
     {#if loaded}
         <div class="top">
             <SecondaryText --color="white" --text-transform="none">
-                {subCategoryData.name}
+                {subCategory.name}
             </SecondaryText>
         </div>
         <div class="right">
-            <img src={"data:image/jpeg;base64," + subCategoryData.image?.fileContents} alt={subCategoryData.name}>
+            <img src={"data:image/jpeg;base64," + image?.fileContents} alt={subCategory.name}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 210">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M172 0H0V212H172V0ZM86 166C119.137 166 146 139.137 146 106C146 72.8629 119.137 46 86 46C52.8629 46 26 72.8629 26 106C26 139.137 52.8629 166 86 166Z" fill={color}/>
             </svg>
