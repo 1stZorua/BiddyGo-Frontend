@@ -1,6 +1,5 @@
 <script lang=ts>
 	import type { Bid } from "$lib/types/types.ts";
-    import { getContext } from "svelte";
     import { formatCurrency, sendRequest, placeBid } from "$lib/functions/index.ts";
     import { isModalOpen, openModalPromise, closeModalPromise, hubConnection } from "../../../stores/index.ts";
     import { calculateBidIncrements } from "$lib/functions/index.ts";
@@ -17,9 +16,9 @@
     export let currentBid: Bid;
     export let auctionListingId: number;
     export let pageModal: boolean = false;
+    export let formData: SuperValidated<BidSchema>;
 
-    const data = getContext("bidData") as SuperValidated<BidSchema>;
-    const { form, errors, enhance, constraints } = superForm(data, {
+    const { form, errors, enhance, constraints } = superForm(formData, {
         id: `bid_${pageModal}`
     });
 
