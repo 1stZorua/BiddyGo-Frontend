@@ -5,6 +5,7 @@
     import { getFlash } from "sveltekit-flash-message/client";
     import { page } from "$app/stores";
     import toast, { Toaster } from "svelte-french-toast";
+    
 
     const flash = getFlash(page);
 
