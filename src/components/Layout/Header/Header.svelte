@@ -2,6 +2,7 @@
     import { headerLinks } from "./config";
     import { Logo, PrimaryButton } from "../../index.ts";
 	import HamburgerMenu from "./HamburgerMenu.svelte";
+    import { page } from "$app/stores";
     
     let active: boolean = false;
 
@@ -28,7 +29,7 @@
                     on:click={handleSearchClick}
                 >
             </form>
-            <PrimaryButton onClick={() => window.location.href="/login"}>Sign In</PrimaryButton>
+            <PrimaryButton onClick={() => window.location.href="/login"}>{!$page.data.user ? "Sign In" : "Account"}</PrimaryButton>
         </div>
         <HamburgerMenu></HamburgerMenu>
     </nav>
