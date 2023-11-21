@@ -1,6 +1,6 @@
 import { API_URL } from "../index.ts";
 
-export async function sendRequest<Return>(
+export async function sendRequest<Return, T>(
     url: string, 
     method: string, 
     data: T | null = null
