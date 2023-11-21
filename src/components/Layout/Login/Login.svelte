@@ -2,7 +2,7 @@
     import { superForm } from "sveltekit-superforms/client";
     import type { SuperValidated } from "sveltekit-superforms";
 	import type { LoginSchema } from "$lib/schemas/login.ts";
-    import { Heading, Input, PrimaryButton, SmallText } from "../../index.ts";
+    import { Heading, Input, PrimaryButton, SmallText, Error } from "../../index.ts";
 
     export let data: SuperValidated<LoginSchema>;
     export let onClick: () => void;
@@ -19,6 +19,9 @@
                 <SmallText --color="#159895">Create account</SmallText>
             </button>
         </div>
+        {#if $errors._errors}
+            <Error>{$errors._errors}</Error>
+        {/if}
         <div>
             <Input 
                 label={"Email"}
