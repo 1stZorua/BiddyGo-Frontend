@@ -6,7 +6,16 @@ import { sendRequest } from "$lib/functions/index.js";
 import { redirect } from "sveltekit-flash-message/server";
 import type { User } from "$lib/types/types.js";
 
+interface Auth {
+    token: string
+};
+
 export const load = async (event) => {
+    const { locals } = event;
+    if (locals.user) {
+        throw redirect(302, "/account");
+    }
+
     const loginForm = await superValidate(event, loginSchema);
     const registerForm = await superValidate(event, registerSchema);
     return { 
@@ -17,12 +26,14 @@ export const load = async (event) => {
 
 export const actions = {
     login: async (event) => {
+        const { cookies } = event;
+
         const form = await superValidate(event, loginSchema);
         console.log(form);
 
         if (!form.valid) return fail(400, { form });
 
-        let token: string;
+        let auth: Auth;
 
         try {
             const user: User = {
@@ -30,24 +41,33 @@ export const actions = {
                 password: form.data.password,
             }
 
-            token = await sendRequest<string>(`/api/User/login`, "POST", user);
+            auth = await sendRequest<Auth, User>(`/api/User/login`, "POST", user);
         } catch (error) {
             console.error((error as Error).message);
             if ((error as Error).message.includes("Not Found")) {
-                return fail(400, { error: "Email or password is incorrect", form });
+                form.errors._errors = ["Wrong email or password"];
+                return fail(400, { form });
             }
-            return fail(500, { error: "Internal server error", form });
+            form.errors._errors = ["Internal server error"];
+            return fail(500, { form });
         }
 
-        console.log(token);
+        cookies.set("session", auth.token, {
+            path: "/",
+            httpOnly: true,
+            sameSite: "strict",
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 60 * 60 * 24 * 30,
+        })
 
         throw redirect(
-            "/",
+            302,
+            cookies.get("intendedPage") ?? "/",
             { 
                 type: "success", 
                 message: "Succesfully logged in."
             }, 
-            event
+            event,
         );
     },
 
@@ -61,7 +81,8 @@ export const actions = {
             const user = await sendRequest(`/api/User/email/${form.data.email}`, "GET");
             
             if (user) {
-                return fail(400, { error: "User already exists", form });
+                form.errors._errors = ["Email already exists"];
+                return fail(400, { form });
             }
         } catch (error) {
             if ((error as Error).message.includes("Not Found")) {
@@ -72,11 +93,13 @@ export const actions = {
 
                 await sendRequest(`/api/User`, "POST", newUser);
             } else {
-                return fail(500, { error: "Internal server error", form });
+                form.errors._errors = ["Internal server error"];
+                return fail(500, { form });
             }
         }
 
         throw redirect(
+            302,
             "/login",
             {
                 type: "success",
