@@ -36,7 +36,6 @@
     }
 
     async function onConfirmBid() {
-        console.log($form.amount);
         if ($form.amount > currentBid.amount) {
             const bid: Bid = {
                 id: "",
@@ -51,7 +50,7 @@
 
             flash.set({type: "success", message: `Placed bid of \u20AC${formatCurrency(bid.amount)}.`});
         } else {
-            console.log("Bid is the same as current bid.");
+            flash.set({type: "error", message: `A bid with this amount has already been placed`});
         }
         closeModalPromise();
     }
@@ -63,7 +62,7 @@
             active={active} 
             label="&euro; {bidIncrements[0]} or up" 
             type="number"
-            name={"amount"}  
+            name="amount" 
             min={bidIncrements[0]}
             error={$errors.amount} 
             errorLocation="up"
