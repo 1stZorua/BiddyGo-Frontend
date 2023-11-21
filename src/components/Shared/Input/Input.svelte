@@ -4,7 +4,7 @@
 
     export let active: boolean = true;
     export let label: string = "";
-    export let value: string | number;
+    export let value: string | number | JSON;
     export let error: string[] | undefined = [];
     export let errorLocation : string = "down";
     export let onInput: (event: Event) => void = () => {};
@@ -27,7 +27,7 @@
         >
         {#if error && error?.length != 0}
             <i class="fa-solid fa-circle-exclamation" transition:fade></i>
-            <div style="{errorLocation !== "down" ? "position:absolute;top:-45px;" : "position:absolute;top:70px"}" transition:slide>
+            <div class="error__text" style="{errorLocation !== "down" ? "position:absolute;top:-45px;" : "position:absolute;top:70px"}" transition:slide>
                 <SmallText --color="#f05b4d">{error?.at(0)}</SmallText>
             </div>
         {/if}
@@ -92,11 +92,16 @@
 
     i {
         position: absolute;
-        right: 30px; // Adjust as needed
-        top: 50%; // Center vertically
-        transform: translateY(-50%); // Center vertically
+        right: 30px;
+        top: 50%; 
+        transform: translateY(-50%); 
         color: $error-color;
         background: $gray-light;
+        pointer-events: none;
+    }
+
+    .error__text {
+        pointer-events: none;
     }
 
     .input[data-active="false"] input {
