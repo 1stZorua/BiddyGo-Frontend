@@ -22,7 +22,9 @@ export { default as Wrapper } from "./Layout/Wrapper/Wrapper.svelte";
 
 
 // Input
+export { default as FileInput } from "./Shared/Input/File.svelte";
 export { default as Input } from "./Shared/Input/Input.svelte";
+export { default as RadioCard } from "./Shared/Input/Radio.svelte";
 
 // Buttons
 export { default as FavoriteButton } from "./Shared/Buttons/Favorite.svelte";
@@ -48,6 +50,7 @@ export { default as ZoomImage } from "./Shared/Objects/ZoomImage.svelte";
 export { default as Square } from "./Shared/Shapes/Square.svelte";
 
 // Text
+export { default as Error } from "./Shared/Text/Error.svelte";
 export { default as Heading } from "./Shared/Text/Heading.svelte";
 export { default as MediumText } from "./Shared/Text/Medium.svelte";
 export { default as Path } from "./Shared/Text/Path.svelte";
