@@ -13,6 +13,13 @@ declare global {
 				message: string;
 			}
 		}
+
+		interface Locals {
+			user: { 
+				email: string,
+				role: string,
+			}
+		}
 	}
 }
 
