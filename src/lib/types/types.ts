@@ -117,5 +117,6 @@ export interface View {
 }
 
 export interface CallbackMap {
-    [key: string]: (...args: object[]) => void;
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    [key: string]: (...args: any[]) => void;
 };
