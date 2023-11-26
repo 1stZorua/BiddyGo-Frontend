@@ -1,6 +1,9 @@
-<script>
+<script lang=ts>
+	import type { AuctionListing } from "$lib/types/types.ts";
     import { PrimaryButton, SecondaryButton, Subtitle } from "../../index.ts"
     import Slider from "./Slider.svelte";
+
+    export let auctionListing: AuctionListing;
 </script>
 
 <section class="banner">
@@ -11,13 +14,13 @@
             <p>Bid confidently on our platform where every auction holds hidden treasures waiting for you to discover.</p>
             <div class="cta">
                 <PrimaryButton --color="white" --background-color="black" --mobile-width="100%">Start Bidding</PrimaryButton>
-                <SecondaryButton text={"Become a Seller"}>
+                <SecondaryButton text={"Become a Seller"} link="/sell">
                     <i class="fa-solid fa-dollar-sign"></i>
                 </SecondaryButton>
             </div>
         </div>
         <div class="display">
-            <Slider></Slider>
+            <Slider {auctionListing}></Slider>
         </div>
     </div>
 </section>
