@@ -7,12 +7,13 @@ import type { PageServerLoad } from "./$types.js";
 export const load: PageServerLoad = async (event) => {
     const auctionListingId = event.params.auctionListingId;
     const formData = await superValidate(event, bidSchema);
-    const [auctionListing, auctionListingImages, currentBid, bidHistory] = await fetchMultipleRequests(
+    const [auctionListing, auctionListingImages, currentBid, bidHistory, favorites] = await fetchMultipleRequests(
         [
             { url: `/api/AuctionListing/${auctionListingId}`, method: "GET" },
             { url: `/api/AuctionListing/images/${auctionListingId}`, method: "GET" },
             { url: `/api/Bid/highest/${auctionListingId}`, method: "GET" },
-            { url: `/api/Bid/${auctionListingId}`, method: "GET" }
+            { url: `/api/Bid/${auctionListingId}`, method: "GET" },
+            { url: `/api/Favorite/auction-listing/${auctionListingId}`, method: "GET" }
         ]
     );
     return { 
@@ -20,14 +21,17 @@ export const load: PageServerLoad = async (event) => {
         auctionListing,
         auctionListingImages, 
         currentBid,
-        bidHistory
+        bidHistory,
+        favorites
     };
 }
 
 export const actions = {
     bid: async (event) => {
+
+        if (!event.locals.user) return;
+
         const form = await superValidate(event, bidSchema);
-        console.log(form);
 
         if (!form.valid) return fail(400, { form });
     },
