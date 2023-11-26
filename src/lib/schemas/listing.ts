@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const listingSchema = z.object({
-    category: z.string(),
-    subCategory: z.string(),
+    categoryId: z.number(),
+    subCategoryId: z.number(),
     imageCount: z.number().min(3),
     title: z.string(),
     description: z.string(),
