@@ -2,11 +2,11 @@
 	import { Subheading } from "../../index.ts";
 
     export let active: boolean = true;
-    export let href: string ="/";
+    export let link: string ="/";
 </script>
 
 {#if active}
-    <a href={href}>
+    <a rel="external" href={link}>
         <slot></slot>
         <i class="fa-solid fa-arrow-right-long"></i>
     </a>
