@@ -1,7 +1,7 @@
 <script lang=ts>
     import { slide } from "svelte/transition";
     import type { Bid } from "$lib/types/types.ts";
-    import { formatCurrency } from "$lib/functions";
+    import { calculateRemainingTime, formatCurrency, formatRemainingTime } from "$lib/functions";
     import { MediumText, SmallText, Subheading } from "../../index.ts";
     import flag_netherlands from "$lib/img/flag_netherlands.svg";
     
@@ -11,6 +11,12 @@
 
     function onSeeAllBidsClick() {
         seeAllBids = !seeAllBids;
+    }
+
+    function calculateAndFormatTime(time: Date) {
+        const calculatedTime = calculateRemainingTime(new Date(time).getTime(), true);
+        const formattedTime = formatRemainingTime(calculatedTime, "short");
+        return formattedTime;
     }
 </script>
 
@@ -27,7 +33,7 @@
                         </div>
                     </td>
                     <td>
-                        <SmallText --font-weight={index === 0 ? "600" : "400"}>{index + 1} h ago</SmallText>
+                        <SmallText --font-weight={index === 0 ? "600" : "400"}>{calculateAndFormatTime(bid.time)} ago</SmallText>
                     </td>
                     <td>
                         <SmallText --font-weight={index === 0 ? "600" : "400"}>&euro;{formatCurrency(bid.amount)}</SmallText>
@@ -58,7 +64,7 @@
                             </div>
                         </td>
                         <td>
-                            <SmallText --font-weight="400">41 h ago</SmallText>
+                            <SmallText --font-weight="400">{formatRemainingTime(calculateRemainingTime(new Date(bid.time).getTime(), true), "short")} ago</SmallText>
                         </td>
                         <td>
                             <SmallText --font-weight="400">&euro;{formatCurrency(bid.amount)}</SmallText>
