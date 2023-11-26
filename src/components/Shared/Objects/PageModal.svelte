@@ -12,6 +12,7 @@
     export let thumbnailImage: Image;
     export let remainingTime: RemainingTime;
     export let formData: SuperValidated<BidSchema>;
+    export let bidText: string;
 
     function openFullScreenGallery(index: number) {
         activeIndex.set(index);
@@ -33,10 +34,10 @@
             </button>
             <div class="content">
                 <div class="info">
-                    <SecondaryText>Current bid</SecondaryText>
+                    <SecondaryText --color={bidText.includes("You") ? "#57C5B6" : "#7A7A7A"}>{bidText}</SecondaryText>
                     <Heading>&euro; {currentBid.formatted_amount}</Heading>
                 </div>
-                <BidForm --form-width="100%" --button-gap="10px" auctionListingId={auctionListing.id} {currentBid} {formData} pageModal={true}></BidForm>
+                <BidForm --form-width="100%" --button-gap="10px" auctionListingId={auctionListing.id} {currentBid} {formData} {remainingTime} pageModal={true}></BidForm>
             </div>
         </div>
         <BidHistory bids={bidHistory}></BidHistory>
@@ -50,7 +51,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 10;
+        z-index: 30;
         width: 100%;
         height: 100%;
         background: $secondary;
@@ -62,6 +63,7 @@
         position: fixed;
         background: $secondary;
         width: 100%;
+        z-index: 40;
         display: flex;
         justify-content: center;
         border-bottom: $btn-border-size solid $accent-secondary;
