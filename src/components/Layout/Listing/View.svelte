@@ -2,15 +2,17 @@
     import { page } from "$app/stores";
     import { formatCurrency, formatRemainingTime } from "$lib/functions/index.ts";
     import { fullscreenGallery } from "../../../stores/index.ts"
-    import { Heading, SecondaryText, Subheading, PrimaryButton, FullScreenGallery, Gallery, MobileGallery, Path, Subtitle, MediumText, SmallText, BidForm, PageModal, Tablist, BidHistory } from "../../index.ts";
+    import { Heading, SecondaryText, Subheading, PrimaryButton, FullScreenGallery, Gallery, MobileGallery, Path, Subtitle, MediumText, SmallText, BidForm, PageModal, Tablist, BidHistory, FavoriteButton } from "../../index.ts";
     import type { ViewData } from "$lib/types/types.ts";
     import { isPageModalOpen } from "../../../stores/index.ts";
 
     export let loaded : boolean;
     export let data : ViewData;
 
+    
     const { auctionListingId, categoryId, subCategoryId } = $page.params;
-
+    
+    $: isFavorited = data.favorites.includes(Number($page.data.user?.id)) ? true : false
     $: data.currentBid.formatted_amount = formatCurrency(data.currentBid.amount) 
 </script>
 
@@ -27,6 +29,9 @@
         <Gallery 
             active={loaded} 
             images={data.auctionListingImages}
+            favorites={data.favorites}
+            {isFavorited}
+            auctionListingId={data.auctionListing.id}
         ></Gallery>
         <MobileGallery 
             active={loaded}
@@ -51,7 +56,7 @@
                 {/if}
             </div>
             <div class="current-bid">
-                <SecondaryText active={loaded}>Current Bid</SecondaryText>
+                <SecondaryText active={loaded} --color={data.bidText.includes("You") ? "#57C5B6" : "#7A7A7A"}>{data.bidText}</SecondaryText>
                 <Heading active={loaded}>&euro; {data.currentBid.formatted_amount}</Heading>
             </div>
             <div class="form">
@@ -78,7 +83,7 @@
     </Tablist>
     <div class="auction-bar">
         <div>
-            <SecondaryText active={loaded}>Current Bid</SecondaryText>
+            <SecondaryText active={loaded} --color={data.bidText.includes("You") ? "#57C5B6" : "#7A7A7A"}>{data.bidText}</SecondaryText>
             <Heading active={loaded}>&euro; {data.currentBid.formatted_amount}</Heading>
             <SmallText active={loaded}>{formatRemainingTime(data.remainingTime)}</SmallText>
         </div>
@@ -95,12 +100,12 @@
 
     .listing {
         display: flex;
-        justify-content: space-between;
         gap: 100px;
         margin-top: -50px;
     }
 
     .text {
+        flex-grow: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -121,7 +126,7 @@
         display: flex;
         justify-content: space-between;
         height: 140px;
-        max-width: 550px;
+        max-width: 600px;
         background: $secondary;
         border-radius: $btn-border-radius-large 0 $btn-border-radius-large 0;
         padding: 30px;
