@@ -1,17 +1,19 @@
+import type { CallbackMap } from "$lib/types/types";
 import * as signalR from "@microsoft/signalr";
 
-export async function useSignalRHub<T>(
+export async function useSignalRHub(
     url: string,
-    method: string,
-    onReceived: (data: T) => void
+    callbacks: CallbackMap
 ) {
     const hubConnection = new signalR.HubConnectionBuilder()
         .withUrl(url)
         .configureLogging(signalR.LogLevel.Information)
         .build()
 
-    hubConnection.on(method, (data) => {
-        onReceived(data);
+    Object.entries(callbacks).forEach(([method, callback]) => {
+        hubConnection.on(method, (...args) => {
+            callback(...args);
+        });
     });
 
     try {
