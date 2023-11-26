@@ -66,7 +66,7 @@
     width: 25%;
     height: 25%;
     opacity: 0;
-    scale: 1.25;
+    scale: 1.75;
     transition: 
         opacity $transition-fast;
 }
