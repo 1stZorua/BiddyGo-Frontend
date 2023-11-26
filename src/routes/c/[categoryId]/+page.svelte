@@ -1,12 +1,12 @@
 <script lang=ts>
-	import type { SubCategory, AuctionListing, Category } from "$lib/types/types";
+	import type { SubCategory, Category, AuctionListings } from "$lib/types/types";
     import { Categories, ListingSlider } from "../../../components/index.ts";
 	import { afterNavigate } from "$app/navigation";
 
     export let data: {
         category: Category,
         subCategories: SubCategory[]
-        auctionListings: AuctionListing[][]
+        auctionListings: AuctionListings[]
     };
 
     let loaded: boolean = false;
@@ -21,7 +21,7 @@
 ></Categories>
 {#if loaded}
     {#each data.subCategories as subCategory, index}
-        <ListingSlider {subCategory} auctionListings={data.auctionListings[index]}></ListingSlider>
+        <ListingSlider {subCategory} auctionListings={data.auctionListings[index].data}></ListingSlider>
     {/each}
 {:else}
     {#each Array(3) as _}
