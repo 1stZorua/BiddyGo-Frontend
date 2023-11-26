@@ -25,6 +25,7 @@ export { default as Wrapper } from "./Layout/Wrapper/Wrapper.svelte";
 export { default as FileInput } from "./Shared/Input/File.svelte";
 export { default as Input } from "./Shared/Input/Input.svelte";
 export { default as RadioCard } from "./Shared/Input/Radio.svelte";
+export { default as TextArea } from "./Shared/Input/TextArea.svelte";
 
 // Buttons
 export { default as FavoriteButton } from "./Shared/Buttons/Favorite.svelte";
