@@ -7,9 +7,11 @@ export const handle: Handle = async({ event, resolve}) => {
 
     const decoded = parseJwt(session);
     const email = decoded["email"];
+    const id = decoded["id"];
 
     if (email) {
         event.locals.user = {
+            id: id,
             email: email,
             role: "user"
         }
