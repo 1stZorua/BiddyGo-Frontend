@@ -6,7 +6,7 @@
 
     export let active: boolean = true;
     export let subCategory: SubCategory = defaultSubCategory;
-    export let auctionListings: Array<AuctionListing> = [];
+    export let auctionListings: AuctionListing[] = [];
 </script>
 
 {#if active}
@@ -14,7 +14,7 @@
         <section class="slider" id={subCategory.name}>
             <div class="separator">
                 <Subheading>{subCategory.name}</Subheading>
-                <TertiaryButton>View All</TertiaryButton>
+                <TertiaryButton link="/c/{subCategory.categoryId}/{subCategory.id}">View All</TertiaryButton>
             </div>
             <Slider --position="absolute" --margin-top="120px">
                 {#each auctionListings as auctionListing}
