@@ -9,7 +9,7 @@
 <style lang=scss>
     h2 {
         font-size: $font-size-heading;
-        font-weight: var(--font-weight, $font-weight-bold);
+        font-weight: var(--font-weight, $font-weight-semiBold);
         color: var(--color, $primary);
     }
 
