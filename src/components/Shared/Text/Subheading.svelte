@@ -9,7 +9,7 @@
 <style lang=scss>
     h3 {
         font-size: $font-size-medium;
-        font-weight: var(--font-weight, $font-weight-bold);
+        font-weight: var(--font-weight, $font-weight-semiBold);
         color: var(--color, $primary);
     }
 
