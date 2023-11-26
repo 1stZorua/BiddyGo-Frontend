@@ -29,7 +29,6 @@ export const actions = {
         const { cookies } = event;
 
         const form = await superValidate(event, loginSchema);
-        console.log(form);
 
         if (!form.valid) return fail(400, { form });
 
@@ -73,7 +72,6 @@ export const actions = {
 
     register: async(event) => {
         const form = await superValidate(event, registerSchema);
-        console.log(form);
 
         if (!form.valid) return fail(400, { form });
 
