@@ -1,17 +1,28 @@
 <script lang=ts>
     import { superForm } from "sveltekit-superforms/client";
-	import { FileInput, Input, SmallText, Subheading, PrimaryButton, RadioCard, Slider } from "../../components/index.ts";
-	import type { PageData } from "./$types";
+	import { FileInput, Input, SmallText, Subheading, PrimaryButton, RadioCard, Slider, TextArea } from "../../components/index.ts";
+	import type { Category, SellData, SubCategory } from "$lib/types/types.ts";
 
-    export let data: PageData
+    export let data: SellData;
 
-    let images: File[] = [];
-    let selectedCategory = 1;
-    
     const MIN_LENGTH: number = 3;
     const MAX_LENGTH: number = 13;
+    const SHIPPING_OPTIONS: string[] = [
+        "Small Package",
+        "Medium Package",
+        "Large Package"
+    ];
 
+    let images: File[] = [];
+    let selectedCategory: Category = data.categories.data[0];
+    let selectedSubCategory: SubCategory = data.subCategories.data[0];
+    let selectedShippingOption: string = SHIPPING_OPTIONS[0];
+    
     const { form, errors, enhance, constraints } = superForm(data.form);
+    $form.categoryId = selectedCategory.id;
+    $form.subCategoryId = selectedCategory.id;
+
+    $: $form.shipping = selectedShippingOption;
 
     function onFileUpload(event: InputEvent) {
         
@@ -35,23 +46,58 @@
 
         $form.imageCount = images.length;
     }
+
+    function onCategoryClick(item: Category) {
+        selectedCategory = item;
+        $form.categoryId = item.id;
+    }
+
+    function onSubCategoryClick(item: SubCategory) {
+        selectedSubCategory = item;
+        $form.subCategoryId = item.id;
+    }
 </script>
 
 <form action="?/create" method="post" enctype="multipart/form-data" use:enhance>
-    <div class="group">
-        <Subheading --font-weight="500">Category and Subcategory</Subheading>
-        <Slider --margin-top="100px">
-            <RadioCard onClick={() => selectedCategory = 1} selected={selectedCategory == 1}></RadioCard>
-            <RadioCard onClick={() => selectedCategory = 2} selected={selectedCategory == 2}></RadioCard>
-            <RadioCard onClick={() => selectedCategory = 3} selected={selectedCategory == 3}></RadioCard>
-            <RadioCard onClick={() => selectedCategory = 4} selected={selectedCategory == 4}></RadioCard>
-            <RadioCard onClick={() => selectedCategory = 5} selected={selectedCategory == 5}></RadioCard>
-            <RadioCard onClick={() => selectedCategory = 6} selected={selectedCategory == 6}></RadioCard>
-            <RadioCard onClick={() => selectedCategory = 7} selected={selectedCategory == 7}></RadioCard>
-            <RadioCard onClick={() => selectedCategory = 8} selected={selectedCategory == 8}></RadioCard>
-            <RadioCard onClick={() => selectedCategory = 9} selected={selectedCategory == 9}></RadioCard>
-            <RadioCard onClick={() => selectedCategory = 10} selected={selectedCategory == 10}></RadioCard>
+    <div class="group slider">
+        <Subheading --font-weight="500">Category</Subheading>
+        <Slider --margin-top="80px">
+            {#each data.categories.data as category}
+                <RadioCard 
+                    onClick={() => () => onCategoryClick(category)} 
+                    selected={selectedCategory == category}
+                >
+                    <SmallText>{category.name}</SmallText>
+                </RadioCard>
+            {/each}
         </Slider>
+        <Input
+            type="text"
+            name="categoryId"
+            hidden
+            readonly
+            bind:value={$form.categoryId}
+        ></Input>
+    </div>
+    <div class="group slider">
+        <Subheading --font-weight="500">Subcategory</Subheading>
+        <Slider --margin-top="80px">
+            {#each data.subCategories.data as subCategory}
+                <RadioCard 
+                    onClick={() => onSubCategoryClick(subCategory)} 
+                    selected={selectedSubCategory == subCategory}
+                >
+                    <SmallText>{subCategory.name}</SmallText>
+                </RadioCard>
+            {/each}
+        </Slider>
+        <Input
+            type="text"
+            name="subCategoryId"
+            hidden
+            readonly
+            bind:value={$form.subCategoryId}
+        ></Input>
     </div>
     <div class="group">
         <div>
@@ -110,17 +156,34 @@
             {...$constraints.title}
             bind:value={$form.title}
         ></Input> 
-        <Input 
+        <TextArea 
             label={"Description"}
             type="text" 
             name="description"
             error={$errors.description}
             {...$constraints.description}
             bind:value={$form.description}
-        ></Input> 
+        ></TextArea> 
     </div>
-    <div class="group">
+    <div class="group slider">
         <Subheading --font-weight="500">Shipping Information</Subheading>
+        <Slider --margin-top="80px">
+            {#each SHIPPING_OPTIONS as option, index}
+                <RadioCard 
+                    onClick={() => selectedShippingOption = SHIPPING_OPTIONS[index]} 
+                    selected={selectedShippingOption == option}
+                >
+                    <SmallText>{option}</SmallText>
+                </RadioCard>
+            {/each}
+        </Slider>
+        <Input
+            type="text"
+            name="shipping"
+            hidden
+            readonly
+            bind:value={$form.shipping}
+        ></Input>
     </div>
     <PrimaryButton --small-width="100%">Create Listing</PrimaryButton>
 </form>
@@ -136,10 +199,10 @@
         display: flex;
         flex-direction: column;
         gap: 30px;
+    }
 
-        &:first-child {
-            height: 250px;
-        }
+    .group.slider {
+        height: 250px;
     }
 
     .images {
