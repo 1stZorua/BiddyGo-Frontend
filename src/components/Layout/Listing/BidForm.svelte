@@ -1,5 +1,5 @@
 <script lang=ts>
-	import type { Bid } from "$lib/types/types.ts";
+	import type { Bid, RemainingTime } from "$lib/types/types.ts";
     import { formatCurrency, sendRequest, placeBid } from "$lib/functions/index.ts";
     import { isModalOpen, openModalPromise, closeModalPromise, hubConnection } from "../../../stores/index.ts";
     import { calculateBidIncrements } from "$lib/functions/index.ts";
@@ -14,9 +14,10 @@
 
     export let active: boolean = true;
     export let currentBid: Bid;
-    export let auctionListingId: number;
+    export let auctionListingId: number | undefined;
     export let pageModal: boolean = false;
     export let formData: SuperValidated<BidSchema>;
+    export let remainingTime: RemainingTime;
 
     const { form, errors, enhance, constraints } = superForm(formData, {
         id: `bid_${pageModal}`
@@ -30,27 +31,41 @@
 
     async function onBidSubmit(e: SubmitEvent) {
         e.preventDefault();
-        if (!$form.amount) return;
+        if (remainingTime.days === 0 && remainingTime.hours === 0 && remainingTime.minutes === 0 && remainingTime.seconds === 0) {
+            flash.set({type: "error", message: "The auction listing has concluded."})
+            return;
+        }
 
+        if (!$page.data.user) {
+            flash.set({type: "error", message: "You need to be logged in to place a bid."});
+            return;
+        }
+
+        if (!$form.amount) return;
+        
         await openModalPromise();
     }
 
     async function onConfirmBid() {
-        if ($form.amount > currentBid.amount) {
-            const bid: Bid = {
-                id: "",
-                auction_listing_id: auctionListingId,
-                bidder_id: 1,
-                amount: Number($form.amount),
-                time: new Date(Date.now())
+        if ($page.data.user) {
+            if ($form.amount > currentBid.amount) {
+                const bid: Bid = {
+                    id: "",
+                    auction_listing_id: auctionListingId!,
+                    bidder_id: Number($page.data.user.id),
+                    amount: Number($form.amount),
+                    time: new Date(Date.now())
+                }
+
+                await sendRequest(`/api/Bid`, "POST", bid);
+                await placeBid($hubConnection, bid.auction_listing_id, bid.bidder_id, +bid.amount);
+
+                flash.set({type: "success", message: `Placed bid of \u20AC${formatCurrency(bid.amount)}.`});
+            } else {
+                flash.set({type: "error", message: `A bid with this amount has already been placed`});
             }
-
-            await sendRequest<Bid>(`/api/Bid`, "POST", bid);
-            await placeBid($hubConnection, bid.auction_listing_id, bid.bidder_id/*Temporary*/, +bid.amount)
-
-            flash.set({type: "success", message: `Placed bid of \u20AC${formatCurrency(bid.amount)}.`});
         } else {
-            flash.set({type: "error", message: `A bid with this amount has already been placed`});
+            flash.set({type: "error", message: "Internal error whilst fetching user data."})
         }
         closeModalPromise();
     }
@@ -72,13 +87,13 @@
         ></Input>
         <div class="cta">
             <div>
-                <OptionButton active={active} --small-width="100%" value={bidIncrements[0]} onClick={onBidClick}>&euro; {formatCurrency(bidIncrements[0])}</OptionButton>
+                <OptionButton active={active} --width="100%"  --small-width="100%" value={bidIncrements[0]} onClick={onBidClick}>&euro; {formatCurrency(bidIncrements[0])}</OptionButton>
             </div>
             <div>
-                <OptionButton active={active} --small-width="100%" value={bidIncrements[1]} onClick={onBidClick}>&euro; {formatCurrency(bidIncrements[1])}</OptionButton>
+                <OptionButton active={active} --width="100%" --small-width="100%" value={bidIncrements[1]} onClick={onBidClick}>&euro; {formatCurrency(bidIncrements[1])}</OptionButton>
             </div>
             <div>
-                <PrimaryButton active={active} --small-width="100%" --color="white" --background-color="black">Place Bid</PrimaryButton>
+                <PrimaryButton active={active} --width="100%" --small-width="100%" --color="white" --background-color="black">Place Bid</PrimaryButton>
             </div>
         </div>
     </form>
@@ -110,12 +125,12 @@
         display: flex;
         flex-direction: column;
         gap: $btn-gap;
-        max-width: var(--form-width, 550px);
+        max-width: var(--form-width, 600px);
 
         .cta {
             display: flex;
             justify-content: space-between;
-            gap: var(--button-gap, 0);
+            gap: 20px;
 
             > * {
                 flex: 1;
