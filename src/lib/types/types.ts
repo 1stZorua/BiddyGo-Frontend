@@ -1,5 +1,6 @@
 import type { SuperValidated } from "sveltekit-superforms";
 import type { BidSchema } from "$lib/schemas/bid.ts";
+import type { ListingSchema } from "$lib/schemas/listing";
 
 export interface RemainingTime {
     days: number,
@@ -14,20 +15,42 @@ export type ViewData = {
     auctionListingImages: Image[],
     currentBid: Bid,
     bidHistory: Bid[],
-    remainingTime: RemainingTime
+    remainingTime: RemainingTime,
+    bidText: string,
+    favorites: number[]
 };
 
+export type ViewSubCategoryData = {
+    subCategory: SubCategory,
+    auctionListings: AuctionListings
+}
+
+export type SellData = {
+    form: SuperValidated<ListingSchema>,
+    categories: Categories,
+    subCategories: SubCategories
+}
+
+export type IndexData = {
+    categories: Categories,
+    latestAuctionListing: AuctionListings
+}
+
 export interface AuctionListing {
-    id: number,
+    id?: number,
     subCategoryId: number,
     title: string,
     description: string,
     startingBid: number,
-    reservePrice: number,
+    reservePrice?: number,
     startTime: Date,
     endTime: Date,
     sellerId: number,
-    remainingTime: RemainingTime
+}
+
+export interface AuctionListings {
+    data: AuctionListing[],
+    totalCount: number
 }
 
 export interface Bid { 
@@ -44,6 +67,11 @@ export interface Category {
     name: string
 }
 
+export interface Categories {
+    data: Category[],
+    totalCount: number
+}
+
 export interface Image {
     fileContents: string,
     contentType: string,
@@ -56,8 +84,38 @@ export interface SubCategory {
     categoryId: number
 }
 
+export interface SubCategories {
+    data: SubCategory[],
+    totalCount: number
+}
+
 export interface User {
     id?: number,
     email: string,
     password: string
 }
+
+export interface Users {
+    data: User[],
+    totalCount: number
+}
+
+export interface LocalUser {
+    id: string,
+    email: string,
+    role: string
+}
+
+export interface Favorite {
+    auctionListingId: number | undefined,
+    userId: number
+}
+
+export interface View {
+    auctionListingId: number | undefined,
+    userId: number
+}
+
+export interface CallbackMap {
+    [key: string]: (...args: object[]) => void;
+};
