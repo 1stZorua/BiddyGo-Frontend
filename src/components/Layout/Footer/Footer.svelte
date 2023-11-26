@@ -20,17 +20,17 @@
             </div>
             <div class="socials-wrapper">
                 <div class="socials">
-                    <SecondaryButton --color="white" --border-color="#B7B7B7">
-                        <a class="icon" href="/"><i class="fa-brands fa-facebook"></i></a>
+                    <SecondaryButton link="/" --color="white" --border-color="#B7B7B7">
+                        <i class="fa-brands fa-facebook"></i>
                     </SecondaryButton>
-                    <SecondaryButton --color="white" --border-color="#B7B7B7">
-                        <a class="icon" href="/"><i class="fa-brands fa-twitter"></i></a>
+                    <SecondaryButton link="/" --color="white" --border-color="#B7B7B7">
+                        <i class="fa-brands fa-twitter"></i>
                     </SecondaryButton>
-                    <SecondaryButton --color="white" --border-color="#B7B7B7">
-                        <a class="icon" href="/"><i class="fa-brands fa-pinterest"></i></a>
+                    <SecondaryButton link="/" --color="white" --border-color="#B7B7B7">
+                        <i class="fa-brands fa-pinterest"></i>
                     </SecondaryButton>
-                    <SecondaryButton --color="white" --border-color="#B7B7B7">
-                        <a class="icon" href="/"><i class="fa-brands fa-instagram"></i></a>
+                    <SecondaryButton link="/" --color="white" --border-color="#B7B7B7">
+                        <i class="fa-brands fa-instagram"></i>
                     </SecondaryButton>
                 </div>
                 <Logo></Logo>
