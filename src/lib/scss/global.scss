@@ -25,7 +25,6 @@
     font-family: $font-family-primary;
     font-size: $font-size-base;
     background: $background-color;
-    // scrollbar-gutter: stable;
     -ms-overflow-style:none;
     scrollbar-width: none;
 
@@ -41,10 +40,14 @@
 :global(button) {
     font-family: $font-family-primary;
     font-size: $font-size-base;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 :global(i) {
     font-size: $font-size-small;
+    cursor: pointer;
 }
 
 :global(input) {
