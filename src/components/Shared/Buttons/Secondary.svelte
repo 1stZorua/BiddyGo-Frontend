@@ -1,8 +1,9 @@
 <script lang=ts>
-    export let text : string = "";
+    export let text: string = "";
+    export let link: string = "";
 </script>
 
-<div>
+<a href={link}>
     <button>
         <span>
             <slot></slot>
@@ -11,14 +12,15 @@
     {#if text !== ""}
         <span>{text}</span>
     {/if}
-</div>
+</a>
 
 <style lang=scss>
-    div {
+    a {
         width: max-content;
         display: flex;
         align-items: center;
         gap: $btn-gap;
+        color: $btn-primary;
 
         &:hover {
             cursor: pointer;
