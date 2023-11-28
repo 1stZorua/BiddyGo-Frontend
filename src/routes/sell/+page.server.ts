@@ -31,14 +31,6 @@ export const actions = {
         const clonedRequest = event.request.clone();
         const form = await superValidate(event, listingSchema);
         const formData = await clonedRequest.formData();
-        const images = formData.getAll("image");
-
-        const test = new FormData();
-
-        images.forEach((image) => {
-            test.append("image", image);
-        });
-
 
         if (!form.valid) return fail(400, { form });
 
@@ -55,13 +47,13 @@ export const actions = {
         const result = await sendRequest<AuctionListing, AuctionListing>("/api/AuctionListing", "POST", auctionListing);
         await fetch(`${API_URL}/api/AuctionListing/images/${result.id}`, {
             method: 'POST',
-            body: formData,
+            body: formData
         });
 
         throw redirect(
             302,
             "/login",
-            {
+            {   
                 type: "success",
                 message: "Successfully created auction listing.",
             },
