@@ -102,7 +102,7 @@
         height: 100%;
         top: 0;
         left: 0;
-        z-index: 11;
+        z-index: 40;
         background: $primary;
     }
 
