@@ -27,7 +27,7 @@ export function formatRemainingTime(remainingTime: RemainingTime, format: "defau
                 ? `${hours}h`
                 : minutes > 0
                 ? `${minutes}m`
-                : `${seconds}h`;
+                : `${seconds}s`;
 
         case "other":
             return days > 0
