@@ -5,6 +5,7 @@
     export let active: boolean = true;
     export let error: string[] | undefined = [];
     export let errorLocation : string = "down";
+    export let value: File[] = [];
     export let onInput: any = () => {};
 </script>
 
@@ -19,6 +20,7 @@
         data-error={error?.at(0)}
         data-sveltekit-keepfocus
         type="file"
+        value={value}
         on:input={onInput}
         {...$$props}
     >
