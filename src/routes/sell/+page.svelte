@@ -56,6 +56,15 @@
         selectedSubCategory = item;
         $form.subCategoryId = item.id;
     }
+
+    const toBase64 = (file:File):Promise<string> => {
+        return new Promise<string> ((resolve,reject)=> {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result?.toString() || '');
+            reader.onerror = error => reject(error);
+        })
+    }
 </script>
 
 <form action="?/create" method="post" enctype="multipart/form-data" use:enhance>
@@ -135,12 +144,18 @@
             </div>
             {#if images.length > 1}
                 <div class="other__images">
-                    {#each images.slice(1, images.length) as image}
-                        <div class="image__wrapper">
-                            <input name="image" type="file" bind:value={image} readonly hidden>
-                            <img src={URL.createObjectURL(image)} alt="">
-                            <div class="hover"></div>
-                        </div>
+                    {#each images as image, index}
+                        {#await toBase64(image) then base64String}
+                            {#if index > 0}
+                                <div class="image__wrapper">
+                                    <input name="base64Image" type="text" value={base64String} hidden>
+                                    <img src={URL.createObjectURL(image)} alt="">
+                                    <div class="hover"></div>
+                                </div>
+                            {:else}
+                                <input name="base64Image" type="text" value={base64String} hidden>
+                            {/if}
+                        {/await}
                     {/each}
                 </div>
             {/if}
