@@ -42,5 +42,6 @@ export const defaultSubCategory: SubCategory = {
 
 export const defaultUser: User = {
     id: 0,
-    email: "default@gmail.com"
+    email: "default@gmail.com",
+    password: "test"
 }
