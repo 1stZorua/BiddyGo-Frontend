@@ -1,10 +1,9 @@
 import { fail } from "@sveltejs/kit";
 import { listingSchema } from "$lib/schemas/listing.ts";
 import { superValidate } from "sveltekit-superforms/server";
-import { fetchMultipleRequests, sendRequest } from "$lib/functions/index.js";
+import { fetchMultipleRequests, sendRequest, API_URL } from "$lib/functions/index.js";
 import type { AuctionListing } from "$lib/types/types.js";
 import { redirect } from "sveltekit-flash-message/server";
-import { API_URL } from "$lib/functions/index.js";
 
 export const load = async (event) => {
     if (!event.locals.user) {
