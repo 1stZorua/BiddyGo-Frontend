@@ -15,36 +15,49 @@ export function calculateRemainingTime(endTime: number, opposite: boolean = fals
 }
 
 export function formatRemainingTime(remainingTime: RemainingTime, format: "default" | "short" | "other" = "default") {
-    const { days, hours, minutes, seconds } = remainingTime;
-
-    const addS = (value: number, unit: string) => (value === 1 ? `${value} ${unit}` : `${value} ${unit}s`);
-
     switch (format) {
         case "short":
-            return days > 0
-                ? addS(days, "day")
-                : hours > 0
-                ? `${hours}h`
-                : minutes > 0
-                ? `${minutes}m`
-                : `${seconds}s`;
-
+            return getShortTime(remainingTime);
         case "other":
-            return days > 0
-                ? addS(days, "day")
-                : hours > 0
-                ? addS(hours, "hour")
-                : minutes > 0
-                ? addS(minutes, "minute")
-                : addS(seconds, "second");
-
+            return getOtherTime(remainingTime);
         default:
-            return days > 0
-                ? `${days}d ${hours}h ${minutes}m ${seconds}s`
-                : hours > 0
-                ? `${hours}h ${minutes}m ${seconds}s`
-                : minutes > 0
-                ? `${minutes}m ${seconds}s`
-                : `${seconds}s`;
+            return getDefaultTime(remainingTime);
     }
+}
+
+function addS(value: number, unit: string) {
+    return value === 1 ? `${value} ${unit}` : `${value} ${unit}s`;
+};
+
+function getShortTime(remainingTime: RemainingTime) {
+    const { days, hours, minutes, seconds } = remainingTime;
+    return days > 0
+        ? addS(days, "day")
+        : hours > 0
+        ? `${hours}h`
+        : minutes > 0
+        ? `${minutes}m`
+        : `${seconds}s`;
+}
+
+function getOtherTime(remainingTime: RemainingTime) {
+    const { days, hours, minutes, seconds } = remainingTime;
+    return days > 0
+        ? addS(days, "day")
+        : hours > 0
+        ? addS(hours, "hour")
+        : minutes > 0
+        ? addS(minutes, "minute")
+        : addS(seconds, "second");
+}
+
+function getDefaultTime(remainingTime: RemainingTime) {
+    const { days, hours, minutes, seconds } = remainingTime;
+    return days > 0
+    ? `${days}d ${hours}h ${minutes}m ${seconds}s`
+    : hours > 0
+    ? `${hours}h ${minutes}m ${seconds}s`
+    : minutes > 0
+    ? `${minutes}m ${seconds}s`
+    : `${seconds}s`;
 }

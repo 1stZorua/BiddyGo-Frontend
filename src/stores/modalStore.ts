@@ -13,5 +13,7 @@ export const openModalPromise = () => {
 
 export const closeModalPromise = () => {
     isModalOpen.set(false);
-    modalResolve && modalResolve();
+    if (modalResolve) {
+        modalResolve();
+    }
 };
