@@ -92,7 +92,7 @@ export interface SubCategories {
 export interface User {
     id?: number,
     email: string,
-    password: string
+    password?: string
 }
 
 export interface Users {
