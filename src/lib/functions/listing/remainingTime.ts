@@ -31,33 +31,42 @@ function addS(value: number, unit: string) {
 
 function getShortTime(remainingTime: RemainingTime) {
     const { days, hours, minutes, seconds } = remainingTime;
-    return days > 0
-        ? addS(days, "day")
-        : hours > 0
-        ? `${hours}h`
-        : minutes > 0
-        ? `${minutes}m`
-        : `${seconds}s`;
+    
+    if (days > 0) {
+        return addS(days, "day");
+    } else if (hours > 0) {
+        return `${hours}h`;
+    } else if (minutes > 0) {
+        return `${minutes}m`;
+    } else {
+        return `${seconds}s`;
+    }
 }
 
 function getOtherTime(remainingTime: RemainingTime) {
     const { days, hours, minutes, seconds } = remainingTime;
-    return days > 0
-        ? addS(days, "day")
-        : hours > 0
-        ? addS(hours, "hour")
-        : minutes > 0
-        ? addS(minutes, "minute")
-        : addS(seconds, "second");
+
+    if (days > 0) {
+        return addS(days, "day");
+    } else if (hours > 0) {
+        return addS(hours, "hour");
+    } else if (minutes > 0) {
+        return addS(minutes, "minute");
+    } else {
+        return addS(seconds, "second");
+    }
 }
 
 function getDefaultTime(remainingTime: RemainingTime) {
     const { days, hours, minutes, seconds } = remainingTime;
-    return days > 0
-    ? `${days}d ${hours}h ${minutes}m ${seconds}s`
-    : hours > 0
-    ? `${hours}h ${minutes}m ${seconds}s`
-    : minutes > 0
-    ? `${minutes}m ${seconds}s`
-    : `${seconds}s`;
+
+    if (days > 0) {
+        return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    } else if (hours > 0) {
+        return `${hours}h ${minutes}m ${seconds}s`;
+    } else if (minutes > 0) {
+        return `${minutes}m ${seconds}s`;
+    } else {
+        return `${seconds}s`;
+    }
 }
