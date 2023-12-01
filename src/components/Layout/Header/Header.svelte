@@ -2,16 +2,20 @@
     import { headerLinks } from "./config";
     import { Logo, PrimaryButton } from "../../index.ts";
 	import HamburgerMenu from "./HamburgerMenu.svelte";
+    import { page } from "$app/stores";
     
-    let searchElement: HTMLInputElement;
-    function handleSearchClick() { searchElement.classList.toggle("is-active"); }
+    let active: boolean = false;
+
+    function handleSearchClick() { 
+        active = !active; 
+    }
 </script>
 
 <header>
     <nav>
         <Logo --background="white"></Logo>
         <ul class="links">
-            {#each headerLinks as link (link)}
+            {#each headerLinks as link}
                 <li><a href={link.href}>{link.name}</a></li>
             {/each}
         </ul>
@@ -21,11 +25,11 @@
                     type="search" 
                     name="search" 
                     placeholder="Search..." 
-                    bind:this={searchElement}
+                    class:is-active={active}
                     on:click={handleSearchClick}
                 >
             </form>
-            <PrimaryButton --primary="black" --secondary="white">Sign In</PrimaryButton>
+            <PrimaryButton onClick={() => window.location.href="/login"}>{!$page.data.user ? "Sign In" : "Account"}</PrimaryButton>
         </div>
         <HamburgerMenu></HamburgerMenu>
     </nav>

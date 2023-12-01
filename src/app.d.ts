@@ -7,6 +7,25 @@ declare global {
 		// interface Locals {}
 		// interface PageData {}
 		// interface Platform {}
+		interface PageData {
+			flash?: {
+				type: "success" | "error";
+				message: string;
+			}
+			user?: {
+				id: string,
+				email: string,
+				role: string
+			}
+		}
+
+		interface Locals {
+			user: { 
+				id: string,
+				email: string,
+				role: string
+			}
+		}
 	}
 }
 

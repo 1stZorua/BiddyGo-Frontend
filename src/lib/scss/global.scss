@@ -25,7 +25,6 @@
     font-family: $font-family-primary;
     font-size: $font-size-base;
     background: $background-color;
-    // scrollbar-gutter: stable;
     -ms-overflow-style:none;
     scrollbar-width: none;
 
@@ -34,17 +33,21 @@
     }
 }
 
-:global(body.menu-opened) {
+:global(body[data-scrollLock="true"]) { 
     overflow-y: hidden;
 }
 
 :global(button) {
     font-family: $font-family-primary;
     font-size: $font-size-base;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 :global(i) {
     font-size: $font-size-small;
+    cursor: pointer;
 }
 
 :global(input) {
@@ -63,18 +66,18 @@
     animation: fadeIn 0.5s forwards; 
 }
 
+:global(.hidden) {
+    display: none;
+}
+
 @media(max-width: $screen-wide) {
     :global(body:has(.auction-bar)) { 
-        // :global(.footer) {
-        //     display: none!important;
-        // }
-
         padding-bottom: 10%;
     }
 }
 
 @media(max-width: $screen-extraLarge) {
-    :global(body.menu-open) {
+    :global(body[data-scrollLock="true"]) {
         overflow-y: hidden;
     }
 }

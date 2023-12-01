@@ -1,7 +1,35 @@
-import { formatCurrency } from '$lib/tests/formatCurrency';
+import { formatCurrency } from '$lib/functions';
 import { it, expect } from 'vitest';
 
-it('Adds the $ before the given number', () => {
-    const result = formatCurrency(10);
-    expect(result).toBe('$10');
+it('formats currency correctly', () => {
+    //Arrange
+    const amount = 1000;
+
+    //Act
+    const result = formatCurrency(amount);
+
+    //Assert
+    expect(result).toBe('1,000');
+});
+
+it('handles zero correctly', () => {
+    //Arrange
+    const amount = 0;
+
+    //Act
+    const result = formatCurrency(amount);
+
+    //Assert
+    expect(result).toBe('0');
+});
+
+it('handles negative values correctly', () => {
+    //Arrange
+    const amount = -500;
+
+    //Act
+    const result = formatCurrency(amount);
+
+    //Assert
+    expect(result).toBe('-500');
 });

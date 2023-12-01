@@ -1,8 +1,8 @@
 <script lang=ts>
     let slider: HTMLElement;
+    let scrollLeft: number;
     let isDown: boolean = false;
     let startX: number;
-    let scrollLeft: number;
     let animationFrameId: number;
 
     function onSliderMouseDown(e: MouseEvent) {
@@ -15,14 +15,13 @@
 
     function onSliderMouseUpOrLeave() {
         if (isDown) flickEffect();
-
         isDown = false;
     }
 
     function onSliderMouseMove(e: MouseEvent) {
         if (!isDown) return;
         e.preventDefault();
-        const x = e.pageX - slider.offsetLeft;
+        const x = (e.pageX - slider.offsetLeft);
         const walk = (x - startX) * 2;
         slider!.scrollLeft = scrollLeft - walk;
     }
@@ -71,12 +70,12 @@
         margin-top: var(--margin-top, 0);
         position: absolute;
         display: flex;
-        gap: var(--gap, 50px);
+        gap: var(--slider-gap, 50px);
         user-select: none;
         width: 100%;
         height: max-content;
         overflow-x: scroll;
-        padding-right: var(--padding-right, 200px);
+        padding-right: var(--slider-padding-right, 200px);
         -ms-overflow-style:none;
         scrollbar-width: none;
         scroll-snap-type: x mandatory;

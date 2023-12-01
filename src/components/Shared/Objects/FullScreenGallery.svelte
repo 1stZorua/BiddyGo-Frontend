@@ -1,8 +1,10 @@
 <script lang=ts>
-    import { onMount } from "svelte";
-    import { fullscreenGallery, activeIndex } from "../../../stores/galleryStore.ts";
+    import { onDestroy, onMount } from "svelte";
 	import type { Image } from "$lib/types/types.ts";
+    import { fullscreenGallery, activeIndex } from "../../../stores/index.ts"
     import { SecondaryText, Slider, SliderArrow } from "../../index.ts";
+
+    export let images: Array<Image> = [];
 
     let sliderContainer: HTMLDivElement;
     let slider: HTMLElement;
@@ -29,13 +31,15 @@
         currentIndex = Math.round(slider.scrollLeft / (slider.scrollWidth / images.length));
     }
 
-    export let images: Array<Image> = [];
-
     onMount(() => {
         slider = sliderContainer.querySelector('.container')!;
         slider.scrollLeft += currentIndex * (slider.scrollWidth / images.length);
         slider.addEventListener("scroll", onSliderScroll);
     });
+
+    onDestroy(() => {
+        slider.removeEventListener("scroll", onSliderScroll);
+    })
 </script>
 
 <div class="gallery">
@@ -60,7 +64,7 @@
             class="slider-container"
             bind:this={sliderContainer}
         >
-            <Slider --gap="0" --padding-right="0">
+            <Slider --slider-gap="0" --slider-padding-right="0">
                 {#each images as image}
                     <div>
                         <img src={"data:image/jpeg;base64," + image?.fileContents} alt="placeholder">
@@ -98,7 +102,7 @@
         height: 100%;
         top: 0;
         left: 0;
-        z-index: 11;
+        z-index: 40;
         background: $primary;
     }
 
@@ -167,13 +171,23 @@
         left: 50%;
         transform: translateX(-50%);
 
+        > * {
+            display: flex;
+        }
+
         button {
             border: none;
             background: none;
         }
 
+        div {
+            outline: $btn-border-size solid $accent-secondary;
+        }
+
         img {
+            height: 20vw;
             width: 20vw;
+            object-fit: cover;
 
             &:hover {
                 cursor: pointer;

@@ -32,8 +32,8 @@ export const navigationLinks = [
 	{
 		title: 'My BiddyGo',
 		links: [
-			{ name: 'Login', href: '#' },
-			{ name: 'Sign up', href: '#' }
+			{ name: 'Login', href: '/login' },
+			{ name: 'Sign up', href: '/login' }
 		]
 	}
 ];

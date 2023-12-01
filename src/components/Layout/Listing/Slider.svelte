@@ -1,34 +1,20 @@
 <script lang=ts>
-	import { onMount } from "svelte";
-	import { sendRequest } from "$lib/functions/request.ts";
 	import type { AuctionListing, SubCategory } from "$lib/types/types";
+	import { defaultSubCategory } from "$lib/types/defaults.ts";
     import { Subheading, TertiaryButton, Slider } from "../../index.ts";
 	import Card from "./Card.svelte";
 
-    let auctionListings : Array<AuctionListing> = []
-    let loaded: boolean = false;
-
     export let active: boolean = true;
-    export let subCategory : SubCategory = {
-        id: 0,
-        name: "Pokemon & Trading Cards",
-        imageId: 0,
-        categoryId: 0,
-    };
-
-    onMount(async() => {
-        if (!active) return;
-        auctionListings = await sendRequest(`/api/AuctionListing/subcategories/${subCategory.id}`, "GET");
-        loaded = true;
-    });
+    export let subCategory: SubCategory = defaultSubCategory;
+    export let auctionListings: AuctionListing[] = [];
 </script>
 
-{#if loaded} 
+{#if active}
     {#if auctionListings.length > 0}
         <section class="slider" id={subCategory.name}>
             <div class="separator">
                 <Subheading>{subCategory.name}</Subheading>
-                <TertiaryButton>View All</TertiaryButton>
+                <TertiaryButton link="/c/{subCategory.categoryId}/{subCategory.id}">View All</TertiaryButton>
             </div>
             <Slider --position="absolute" --margin-top="120px">
                 {#each auctionListings as auctionListing}
@@ -42,13 +28,13 @@
 {:else}
     <section class="slider">
         <div class="separator">
-            <Subheading active={loaded}>{subCategory.name}s</Subheading>
-            <TertiaryButton active={loaded}>View All</TertiaryButton>
+            <Subheading active={active}>{subCategory.name}s</Subheading>
+            <TertiaryButton active={active}>View All</TertiaryButton>
         </div>
         <Slider --position="absolute" --margin-top="120px">
             {#each Array(10) as _}
                 <div>
-                    <Card active={loaded}></Card>
+                    <Card active={active}></Card>
                 </div>
             {/each}
         </Slider>

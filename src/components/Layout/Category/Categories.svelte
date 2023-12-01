@@ -1,49 +1,34 @@
 <script lang=ts>
-    import { onMount } from "svelte";
-    import { sendRequest } from "$lib/functions/request";
     import type { Category, SubCategory } from "$lib/types/types.ts";
     import { Heading, Path } from "../../index.ts";
     import Card from "./Card.svelte";
 
-    let category: Category;
-    let subcategories: Array<SubCategory> = []
-    let loaded: boolean = false;
-
-    export let categoryId: string;
-
-    onMount(async () => {
-        category = await sendRequest(`/api/Category/${categoryId}`, "GET");
-        subcategories = await sendRequest(`/api/Category/subcategories/${categoryId}`, "GET");
-        loaded = true;
-    });
+    export let active: boolean;
+    export let category: Category;
+    export let subCategories: SubCategory[];
 </script>
 
-{#if loaded}
+{#if active}
     <section class="categories">
         <div class="text">
             <Path categories={[category.name]}></Path>
             <Heading>{category.name}</Heading>
         </div>
         <div class="container">
-            {#each subcategories as subcategory}
-                <Card categoryData={
-                    {
-                        imageId: subcategory.imageId, 
-                        title: subcategory.name
-                    }
-                }></Card>
+            {#each subCategories as subCategory}
+                <Card subCategory={subCategory}></Card>
             {/each}
         </div>
     </section>
 {:else}
     <section class="categories">
         <div class="text">
-            <Path active={loaded} categories={["BiddyGo > Entertainment, Cards & Games"]}></Path>
-            <Heading active={loaded}>Entertainment, Cards & Games</Heading>
+            <Path active={active} categories={["BiddyGo > Entertainment, Cards & Games"]}></Path>
+            <Heading active={active}>Entertainment, Cards & Games</Heading>
         </div>
         <div class="container">
             {#each Array(3) as _}
-                <Card active={loaded}></Card>
+                <Card active={active}></Card>
             {/each}
         </div>
     </section>

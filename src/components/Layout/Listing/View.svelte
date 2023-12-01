@@ -1,43 +1,19 @@
 <script lang=ts>
     import { page } from "$app/stores";
-	import { onMount } from "svelte";
-	import { sendRequest } from "$lib/functions/request";
-    import { fullscreenGallery } from "../../../stores/galleryStore.ts";
-	import type { AuctionListing, Image } from "$lib/types/types.ts";
-    import { Heading, SecondaryText, Subheading, FilterButton, OptionButton, PrimaryButton, Input, FullScreenGallery, Gallery, MobileGallery, Path, Subtitle, MediumText, SmallText } from "../../index.ts";
+    import { formatCurrency, formatRemainingTime } from "$lib/functions/index.ts";
+    import { fullscreenGallery } from "../../../stores/index.ts"
+    import { Heading, SecondaryText, Subheading, PrimaryButton, FullScreenGallery, Gallery, MobileGallery, Path, Subtitle, MediumText, SmallText, BidForm, PageModal, Tablist, BidHistory, FavoriteButton } from "../../index.ts";
+    import type { ViewData } from "$lib/types/types.ts";
+    import { isPageModalOpen } from "../../../stores/index.ts";
 
-    let auctionListing: AuctionListing = {
-        id: 0,
-        subCategoryId: 0,
-        title: "The Pokemon Company Mystery box - Blastoise",
-        description: "placeholder",
-        startingBid: 20,
-        reservePrice: 0,
-        startTime: new Date('2023-07-11T00:00:00'),
-        endTime: new Date('2023-07-11T00:00:00'),
-        sellerId: 0
-    };
-    let auctionListingImages: Array<Image> = [];
-    let loaded: boolean = false;
-    
-    let activeButton: number = 1;
-    let tablistContent: HTMLDivElement;
+    export let loaded : boolean;
+    export let data : ViewData;
 
-    const { categoryId, subCategoryId } = $page.params;
-
-    function onTabClick(index: number) {
-        activeButton = index;
-        tablistContent.querySelector(".active")?.classList.remove("active");
-        [...tablistContent.children][index - 1].classList.add("active"); 
-    }
     
-    export let auctionListingId: string;
+    const { auctionListingId, categoryId, subCategoryId } = $page.params;
     
-    onMount(async () => {
-        auctionListing = await sendRequest(`/api/AuctionListing/${auctionListingId}`, "GET");
-        auctionListingImages = await sendRequest(`/api/AuctionListing/images/${auctionListingId}`, "GET");
-        loaded = true;
-    });
+    $: isFavorited = data.favorites.includes(Number($page.data.user?.id)) ? true : false
+    $: data.currentBid.formatted_amount = formatCurrency(data.currentBid.amount) 
 </script>
 
 <section class="view">
@@ -52,68 +28,66 @@
     <div class="listing">
         <Gallery 
             active={loaded} 
-            images={auctionListingImages}
+            images={data.auctionListingImages}
+            favorites={data.favorites}
+            {isFavorited}
+            auctionListingId={data.auctionListing.id}
         ></Gallery>
         <MobileGallery 
             active={loaded}
-            images={auctionListingImages}
+            images={data.auctionListingImages}
         ></MobileGallery>
         {#if $fullscreenGallery}
-            <FullScreenGallery images={auctionListingImages}></FullScreenGallery>
+            <FullScreenGallery images={data.auctionListingImages}></FullScreenGallery>
         {/if}
         <div class="text">
             <div>
-                <Subtitle active={loaded}>NR. {auctionListing.id}</Subtitle>
-                <Subheading active={loaded}>{auctionListing.title}</Subheading>
+                <Subtitle active={loaded} --line-color="white" --screen-wide-color="black">NR. {data.auctionListing.id}</Subtitle>
+                <Subheading active={loaded} --color="white" --screen-wide-color="black" --font-weight="500">{data.auctionListing.title}</Subheading>
             </div>
             <div data-active={loaded} class="time-remaining">
                 {#if loaded}
-                    {#each Array(["1", "Days"], ["9", "Hours"], ["24", "Minutes"], ["17", "Seconds"],) as time}
+                    {#each Object.entries(data.remainingTime) as [key, value]}
                         <div>
-                            <MediumText --color="#7A7A7A" --font-weight="700">{time[0]}</MediumText>
-                            <SmallText --font-weight="600">{time[1]}</SmallText>
+                            <MediumText --color="#7A7A7A" --font-weight="700">{value}</MediumText>
+                            <SmallText --font-weight="600">{key}</SmallText>
                         </div>
                     {/each}
                 {/if}
             </div>
             <div class="current-bid">
-                <SecondaryText active={loaded}>Current Bid</SecondaryText>
-                <Heading active={loaded}>&euro; 289</Heading>
+                <SecondaryText active={loaded} --color={data.bidText.includes("You") ? "#57C5B6" : "#7A7A7A"}>{data.bidText}</SecondaryText>
+                <Heading active={loaded}>&euro; {data.currentBid.formatted_amount}</Heading>
             </div>
-            <form>
-                <Input active={loaded} inputType={"number"} min={299} name={"bidValue"} placeholder="&euro; 299 or up"></Input>
-                <div>
-                    <OptionButton active={loaded}>&euro; 299</OptionButton>
-                    <OptionButton active={loaded}>&euro; 309</OptionButton>
-                    <PrimaryButton active={loaded} --primary="white" --secondary="black">Place Bid</PrimaryButton>
-                </div>
-            </form>
+            <div class="form">
+                <BidForm active={loaded} {...data} auctionListingId={Number(auctionListingId)}></BidForm>
+            </div>
         </div>
     </div>
-    <div class="information">
-        <div class="tablist">
-            {#each Array("Description", "Shipping", "Bidding History", "Seller Information") as tab, index}
-                <FilterButton active={loaded} activeButton={activeButton} number={index + 1} onClick={onTabClick}>{tab}</FilterButton>
-            {/each}
+    <Tablist
+        active={loaded}
+        sections={Array("Description", "Shipping", "Bid History", "Seller Information")}
+    >
+        <div>
+            <Subheading active={loaded} --font-weight="500">{data.auctionListing.description}</Subheading>
         </div>
-        <div 
-            class="content" 
-            bind:this={tablistContent}
-        >
-            {#each Array(auctionListing.description, "Shipping", "Bidding History", "Seller Information") as content, index}
-                <div class={index === 0 ? "active" : ""}>
-                    <Subheading active={loaded}>{content}</Subheading>
-                </div>
-            {/each}
+        <div class="hidden">
+            <Subheading --font-weight="500">Shipping</Subheading>
         </div>
-    </div>
+        <div class="hidden">
+            <BidHistory bids={data.bidHistory}></BidHistory>
+        </div>
+        <div class="hidden">
+            <Subheading --font-weight="500">Seller Information</Subheading>
+        </div>
+    </Tablist>
     <div class="auction-bar">
         <div>
-            <SecondaryText active={loaded}>Current Bid</SecondaryText>
-            <Heading active={loaded}>&euro; 289</Heading>
-            <SmallText active={loaded}>1d 9u 24m 17s</SmallText>
+            <SecondaryText active={loaded} --color={data.bidText.includes("You") ? "#57C5B6" : "#7A7A7A"}>{data.bidText}</SecondaryText>
+            <Heading active={loaded}>&euro; {data.currentBid.formatted_amount}</Heading>
+            <SmallText active={loaded}>{formatRemainingTime(data.remainingTime)}</SmallText>
         </div>
-        <PrimaryButton active={loaded} --primary="white" --secondary="black">Place Bid</PrimaryButton>
+        <PrimaryButton active={loaded} --color="white" --background-color="black" onClick={() => isPageModalOpen.set(true)}>Place Bid</PrimaryButton>
     </div>
 </section>
 
@@ -126,24 +100,34 @@
 
     .listing {
         display: flex;
-        justify-content: space-between;
         gap: 100px;
         margin-top: -50px;
     }
 
     .text {
+        flex-grow: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+
+        &::before {
+            content: '';
+            position: absolute;
+            background: $section-light;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 400px;
+            margin-top: -25px;
+        }
     }
 
     .time-remaining{
         display: flex;
         justify-content: space-between;
         height: 140px;
-        max-width: 550px;
+        max-width: 600px;
         background: $secondary;
-        border: $btn-option-border;
         border-radius: $btn-border-radius-large 0 $btn-border-radius-large 0;
         padding: 30px;
 
@@ -159,38 +143,6 @@
         background-size: 200% 100%; 
         animation: $skeleton-animation;
         border: none;
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: $btn-gap;
-        max-width: 550px;
-
-        div {
-            display: flex;
-            justify-content: space-between;
-        }
-    }
-
-    .information {
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-    }
-
-    .tablist {
-        display: flex;
-        flex-wrap: wrap;
-        gap: $btn-gap;
-    }
-
-    .content div {
-        display: none;
-    }
-
-    .content div.active {
-        display: block;
     }
 
     .auction-bar {
@@ -216,9 +168,13 @@
         .text {
             gap: 50px;
 
-            > *:not(:first-child) {
+            > *:not(:first-child), &::before {
                 display: none;
             }
+        }
+
+        .form {
+            display: none;
         }
 
         .auction-bar {

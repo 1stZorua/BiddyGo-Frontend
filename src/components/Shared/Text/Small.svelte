@@ -11,6 +11,8 @@
         color: var(--color, $primary);
         font-size: $font-size-base;
         font-weight: var(--font-weight, $font-weight-regular);
+        height: var(--height, 100%);
+        overflow: hidden;
     }
 
     [data-active="false"] {

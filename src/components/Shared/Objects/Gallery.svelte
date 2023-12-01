@@ -1,11 +1,22 @@
 <script lang=ts>
-	import { onMount } from "svelte";
-    import { fullscreenGallery, activeIndex } from "../../../stores/galleryStore.ts";
-	import type { Image } from "$lib/types/types.ts";
-    import { ZoomImage } from "../../index.ts";
+    import { fullscreenGallery, activeIndex, hubConnection } from "../../../stores/index.ts"
+	import type { Image, Favorite } from "$lib/types/types.ts";
+    import { FavoriteButton, SmallText, ZoomImage } from "../../index.ts";
+    import { page } from "$app/stores";
+    import { getFlash } from "sveltekit-flash-message/client";
+	import { addFavorite, sendRequest } from "$lib/functions/index.ts";
+
+    const flash = getFlash(page);
+
+    export let active: boolean = true;
+    export let images: Array<Image>;
+    export let favorites: number[];
+    export let isFavorited: boolean;
+    export let auctionListingId: number | undefined;
 
     let activeImageIndex: number = 0;
     let previousActiveIndex: number = 0;
+    
 
     function onMouseClick(index: number) {
         activeImageIndex = index;
@@ -25,16 +36,41 @@
         fullscreenGallery.set(true)
     }
 
-    export let active: boolean = true;
-    export let images: Array<Image> = [];
-    
-    $: {
-        console.log(images.length);
+    async function onFavorite() {
+        if (!$page.data.user) {
+            flash.set({type: "error", message: "You need to be logged in to favorite an auction listing."});
+            return;
+        }
+
+        const favorite: Favorite = {
+            auctionListingId: auctionListingId,
+            userId: Number($page.data.user.id)
+        }
+
+        let remove: boolean = false;
+
+        if (favorites.includes(favorite.userId)) {
+            remove = true
+        }
+
+        isFavorited = favorites.includes(favorite.userId);
+        favorites.length = favorites.length;
+
+        await sendRequest(`/api/Favorite`, "POST", favorite);
+        await addFavorite($hubConnection, favorite.userId, favorite.auctionListingId, favorites.includes(favorite.userId));
     }
 </script>
 
 {#if active}
     <div class="image-container">
+        <button class="favorite" on:click|preventDefault>
+            <FavoriteButton 
+                isFavorited={isFavorited}
+                onClick={onFavorite}
+            >
+                <SmallText --height="max-content">{favorites.length}</SmallText>
+            </FavoriteButton>
+        </button>
         <div class="preview-container">
             <ZoomImage src={"data:image/jpeg;base64," + images[activeImageIndex]?.fileContents}></ZoomImage>
         </div>
@@ -76,6 +112,7 @@
 
 <style lang=scss>
     .image-container {
+        position: relative;
         display: flex;
         flex-direction: column;
         gap: 30px;
@@ -103,6 +140,13 @@
         img.active {
             outline: $btn-border-size solid $accent-secondary;
         }
+    }
+
+    .favorite {
+        position: absolute;
+        top: -50px;
+        left: 10px;
+        z-index: 10;
     }
 
     .preview-container {

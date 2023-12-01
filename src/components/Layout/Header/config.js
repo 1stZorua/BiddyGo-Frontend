@@ -1,7 +1,7 @@
 export const headerLinks = [
 	{
 		name: 'Home',
-		href: '#'
+		href: '/'
 	},
 	{
 		name: 'Categories',
@@ -9,10 +9,6 @@ export const headerLinks = [
 	},
 	{
 		name: 'Sell',
-		href: '#'
-	},
-	{
-		name: 'Help',
-		href: '#'
+		href: '/sell'
 	}
 ];

@@ -1,42 +1,39 @@
 <script lang=ts>
 	import { onMount } from "svelte";
-	import { sendRequest } from "$lib/functions/request.ts";
-    import scrollTo from "$lib/functions/scroll.ts";
-    import type { Image } from "$lib/types/types";
+    import { sendRequest, scrollTo } from "$lib/functions/index.ts";
+    import type { Image, SubCategory } from "$lib/types/types";
+	import { defaultSubCategory } from "$lib/types/defaults.ts";
     import { SecondaryText } from "../../index.ts";
+    
+    export let active: boolean = true;
+    export let subCategory: SubCategory = defaultSubCategory;
     
     let loaded: boolean = false;
     let color = '#FBB763';
-
-    export let active: boolean = true;
-    export let categoryData: {
-        imageId: number,
-        image?: Image | null,
-        title: string
-    } = { imageId: 0, title: "" };
+    let image: Image;
     
     onMount(async () => {
         if (!active) return;
-        categoryData.image = await sendRequest(`/api/Image/${categoryData.imageId}`, "GET");
+        image = await sendRequest(`/api/Image/${subCategory.imageId}`, "GET");
         loaded = true;
     });
 </script>
 
 <a 
-    href="#{categoryData.title}" 
+    href="#{subCategory.name}" 
     class="card" 
     style="--color: {color};"
     data-active={loaded}
-    on:click={(e) => { e.preventDefault(); scrollTo(categoryData.title, true) }}
+    on:click={(e) => { e.preventDefault(); scrollTo(subCategory.name, true) }}
 >
     {#if loaded}
         <div class="top">
             <SecondaryText --color="white" --text-transform="none">
-                {categoryData.title}
+                {subCategory.name}
             </SecondaryText>
         </div>
         <div class="right">
-            <img src={"data:image/jpeg;base64," + categoryData.image?.fileContents} alt={categoryData.title}>
+            <img src={"data:image/jpeg;base64," + image?.fileContents} alt={subCategory.name}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 210">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M172 0H0V212H172V0ZM86 166C119.137 166 146 139.137 146 106C146 72.8629 119.137 46 86 46C52.8629 46 26 72.8629 26 106C26 139.137 52.8629 166 86 166Z" fill={color}/>
             </svg>

@@ -1,19 +1,46 @@
-<script>
-    import { SecondaryText, Square } from "../../index.ts";
+<script lang=ts>
+    import { MediumText, SecondaryText, Square } from "../../index.ts";
+    import type { AuctionListing, Bid, Image, SubCategory } from "$lib/types/types.ts";
     import comic from "$lib/img/comic.png";
+	import { onMount } from "svelte";
+	import { fetchMultipleRequests, formatCurrency } from "$lib/functions/index.ts";
+	import { defaultBid, defaultSubCategory } from "$lib/types/defaults.ts";
+
+    export let auctionListing: AuctionListing;
+
+    let loaded: boolean = false;
+    let thumbnailImage: Image;
+    let subCategory: SubCategory = defaultSubCategory;
+    let currentBid: Bid = defaultBid;
+
+    onMount(async () => {
+        const [thumbnailResponse, subCategoryResponse, currentBidResponse] = await fetchMultipleRequests(
+            [
+                { url: `/api/AuctionListing/thumbnail/${auctionListing.id}`, method: "GET" },
+                { url: `/api/SubCategory/${auctionListing.subCategoryId}`, method: "GET" },
+                { url: `/api/Bid/highest/${auctionListing.id}`, method: "GET" }
+            ]
+        );
+
+        [thumbnailImage, subCategory, currentBid] = [thumbnailResponse as Image, subCategoryResponse as SubCategory, currentBidResponse as Bid];
+
+        loaded = true;
+    })
 </script>
 
 <div class="slider-container">
     <div class="slider">
-        <div class="item"><img src={comic} alt="test"></div>
-        <div class="item"><img src={comic} alt="test"></div>
-        <div class="item"><img src={comic} alt="test"></div>
-        <div class="item"><img src={comic} alt="test"></div>
-        <div class="item"><img src={comic} alt="test"></div>
+        <div class="item">
+            {#if thumbnailImage}
+                <img src={"data:image/jpeg;base64," + thumbnailImage?.fileContents} alt={auctionListing.title}>
+            {:else}
+                <div></div>
+            {/if}
+        </div>
     </div>
     <div class="square-container">
         <div class="element">
-            <a href="/">
+            <a href={loaded ? `/c/${subCategory.categoryId}/${subCategory.id}/${auctionListing.id}` : ""}>
                 <i class="fa-solid fa-globe"></i>
             </a>
             <div class="square"></div>
@@ -22,8 +49,14 @@
         <div class="element"><Square --size="100px" --background="#002B5B" --radius="20px"></Square></div>
         <div class="element">
             <div class="square">
-                <SecondaryText --color="white">Current bid</SecondaryText>
-                <span>$700</span>
+                {#if loaded}
+                    <SecondaryText active={loaded} --color="white" --background="transparent">Current bid</SecondaryText>
+                    <div>
+                        <MediumText active={loaded} --color="white" --background="transparent">&euro;{formatCurrency(currentBid.amount)}</MediumText>
+                    </div>
+                {:else}
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                {/if}
             </div>
         </div>
     </div>
@@ -38,7 +71,6 @@
 
     .slider {
         height: 100%;
-        //Change transform : translateY() here to shift slider items
     }
     
     .slider .item {
@@ -46,6 +78,18 @@
         position: relative;
 
         img {
+            width: 500px;
+            height: 650px;
+            border-radius: $btn-border-radius-full; 
+            object-fit: cover;
+        }
+
+        div {
+            width: 500px;
+            height: 650px;
+            background: var(--background, $skeleton-background-color);
+            background-size: 200% 100%; 
+            animation: $skeleton-animation; 
             border-radius: $btn-border-radius-full; 
         }
     }
@@ -107,12 +151,10 @@
                 height: 250px;
                 width: 250px;
                 border-radius: $btn-border-radius-large;
+            }
 
-                span {
-                    font-size: $font-size-medium;
-                    font-weight: $font-weight-bold;
-                    color: $secondary;
-                }
+            i {
+                color: $btn-secondary;
             }
         }
     } 
@@ -126,12 +168,13 @@
             background: $gray-light;
             border-radius: $btn-border-radius-large;
 
-            img {
+            img, div {
                 border-radius: $btn-border-radius-rounded;
                 width: 100%;
                 height: 100%;
                 object-fit: scale-down;
             }
+            
         }
 
         .square-container .element {

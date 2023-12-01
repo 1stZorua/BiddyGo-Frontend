@@ -1,15 +1,15 @@
 <script lang=ts>
-    import { fullscreenGallery, activeIndex } from "../../../stores/galleryStore.ts";
+    import { fullscreenGallery, activeIndex } from "../../../stores/index.ts";
 	import type { Image } from "$lib/types/types.ts";
     import { Slider } from "../../index.ts";
+
+    export let active: boolean = true;
+    export let images: Array<Image> = [];
 
     function openFullScreenGallery(index: number) {
         activeIndex.set(index);
         fullscreenGallery.set(true)
     }
-
-    export let active: boolean = true;
-    export let images: Array<Image> = [];
 </script>
 
 <div class="mobile-image-container">
@@ -53,6 +53,10 @@
     button {
         border: none;
         background: none;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     @media (max-width: $screen-large) {

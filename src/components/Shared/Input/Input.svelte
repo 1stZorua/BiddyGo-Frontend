@@ -1,21 +1,72 @@
 <script lang=ts>
+	import { fade, slide } from "svelte/transition";
+	import { SmallText } from "../../index.ts";
+
     export let active: boolean = true;
-    export let inputType: string = "text";
-    export let min: number = 0;
-    export let name: string = "";
-    export let placeholder: string = "";
+    export let label: string = "";
+    export let value: string | number | JSON;
+    export let error: string[] | undefined = [];
+    export let errorLocation : string = "down";
+    export let onInput: (event: Event) => void = () => {};
 </script>
 
-<input 
-    data-active={active} 
-    type={inputType} 
-    name={name} 
-    min={min} 
-    placeholder={placeholder} 
-    data-sveltekit-keepfocus
->
+<div class="input" data-active={active}>
+    <label for={$$props.name}>
+        {label}
+    </label>
+    <div>
+        <input 
+            class:error={error && error?.length != 0}
+            data-active={active} 
+            data-error={error?.at(0)}
+            data-sveltekit-keepfocus
+            placeholder=""
+            bind:value={value}
+            on:input={onInput}
+            {...$$props}
+        >
+        {#if error && error?.length != 0}
+            <i class="fa-solid fa-circle-exclamation" transition:fade></i>
+            <div class="error__text" style="{errorLocation !== "down" ? "position:absolute;top:-45px;" : "position:absolute;top:70px"}" transition:slide>
+                <SmallText --color="#f05b4d">{error?.at(0)}</SmallText>
+            </div>
+        {/if}
+    </div>  
+</div>
 
 <style lang=scss>
+    .input {
+        position: relative;
+    }
+
+    .input:not(:has(input:placeholder-shown)) label,
+    .input:is(:hover, :focus) label {
+        transform: translateY(-135%);
+        font-size: calc($font-size-base * 0.75);
+    }
+
+    .input:has(i) input {
+        padding-right: 60px;
+    }
+
+    label {
+        position: absolute;
+        padding-inline: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $gray-regular;
+        pointer-events: none;
+        transition:
+            transform $transition-fast,
+            font-size $transition-fast;
+    }
+
+    .input > div {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
     input {
         padding-inline: 30px;
         background: $gray-light;
@@ -31,11 +82,29 @@
         }
 
         &:hover, &:focus {
-            outline: 3px solid $gray-regular;
+            outline: $btn-border-size solid $gray-regular;
         }
     }
 
-    [data-active="false"] {
+    input.error, input.error:is(:hover, :focus) {
+        outline: $btn-border-size solid $error-color;
+    }
+
+    i {
+        position: absolute;
+        right: 30px;
+        top: 50%; 
+        transform: translateY(-50%); 
+        color: $error-color;
+        background: $gray-light;
+        pointer-events: none;
+    }
+
+    .error__text {
+        pointer-events: none;
+    }
+
+    .input[data-active="false"] input {
         background: $skeleton-background-color;
         background-size: 200% 100%; 
         animation: $skeleton-animation;
@@ -44,5 +113,9 @@
         &::placeholder {
             color: transparent;
         }
+    }
+
+    .input[data-active="false"] label {
+        display: none;
     }
 </style>

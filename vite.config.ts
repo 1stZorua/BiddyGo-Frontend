@@ -12,5 +12,8 @@ export default defineConfig({
 				`
 			}
 		}
+	},
+	test: {
+		exclude: ["**/*.spec.*"]
 	}
 });
